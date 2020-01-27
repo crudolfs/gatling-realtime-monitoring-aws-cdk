@@ -19,3 +19,8 @@ It is a [Maven](https://maven.apache.org/) based project, so you can open this p
  * `cdk synth GatlingEcrStack --profile <profile-name>`
  * `cdk deploy SharedVpcStack --profile <profile-name>`
  * `cdk deploy GatlingEcrStack --profile <profile-name>`
+ 
+ Stack order:
+ 1. SharedVpcStack
+ 2. GatlingEcrStack
+ 3. GatlingEcsFargateStack

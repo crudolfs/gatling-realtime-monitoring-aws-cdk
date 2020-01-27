@@ -22,6 +22,7 @@ public class GatlingRealtimeMonitoringCdkApp {
 
         new SharedVpcStack(app, "SharedVpcStack", stackProps);
         new GatlingEcrStack(app, "GatlingEcrStack", stackProps);
+        new GatlingEcsFargateStack(app, "GatlingEcsFargateStack", stackProps);
 
         app.synth();
     }
