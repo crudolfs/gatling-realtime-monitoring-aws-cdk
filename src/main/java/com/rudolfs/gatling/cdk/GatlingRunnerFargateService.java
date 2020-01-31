@@ -68,19 +68,9 @@ public class GatlingRunnerFargateService extends Construct {
                                     .repositoryArn(String.format("arn:aws:ecr:%s:%s:repository/gatling/gatling-runner", region, accountId))
                                     .repositoryName("gatling/gatling-runner")
                                     .build())))
-                    .command(Arrays.asList(
-                            "-h",
-                            "assetscalingservice-dev-alb-1056189997.eu-west-1.elb.amazonaws.com",
-                            "-p",
-                            "80",
-                            "-b",
-                            "asset-scaling-test",
-                            "-f",
-                            "assets"
-                    ))
                     .logging(LogDriver.awsLogs(AwsLogDriverProps.builder()
                             .logGroup(LogGroup.Builder.create(this, "gatlingRunnerFargateLogGroup")
-                                    .logGroupName("/ecs/gatling-runner")
+                                    .logGroupName("/ecs/gatling/gatling-runner")
                                     .retention(RetentionDays.TWO_WEEKS)
                                     .build())
                             .streamPrefix("gatling-runner")

@@ -6,8 +6,10 @@ import software.amazon.awscdk.core.StackProps;
 import software.amazon.awscdk.services.ec2.IVpc;
 import software.amazon.awscdk.services.ec2.Vpc;
 import software.amazon.awscdk.services.ec2.VpcLookupOptions;
+import software.amazon.awscdk.services.ecs.CloudMapNamespaceOptions;
 import software.amazon.awscdk.services.ecs.Cluster;
 import software.amazon.awscdk.services.iam.Role;
+import software.amazon.awscdk.services.servicediscovery.NamespaceType;
 
 public class GatlingEcsFargateStack extends Stack {
     private static final String VPC_NAME_SHARED = "shared-vpc";
@@ -21,8 +23,13 @@ public class GatlingEcsFargateStack extends Stack {
                 .build());
 
         // ECS Cluster setup
-        Cluster ecsCluster = Cluster.Builder.create(this, "AssetScalingServiceLoadTest")
-                .clusterName("assetscalingservice-loadtest")
+        Cluster ecsCluster = Cluster.Builder.create(this, "GatlingRealtimeMonitoringLoadTest")
+                .clusterName("gatling-monitoring-loadtest")
+                .defaultCloudMapNamespace(CloudMapNamespaceOptions.builder()
+                        .name("gatling-monitoring.com")
+                        .type(NamespaceType.DNS_PRIVATE)
+                        .vpc(vpc)
+                        .build())
                 .vpc(vpc)
                 .build();
 

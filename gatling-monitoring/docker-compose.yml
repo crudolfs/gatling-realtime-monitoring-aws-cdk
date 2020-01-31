@@ -1,0 +1,22 @@
+version: "3.3"
+
+services:
+  influxdb:
+    build: influxdb
+    networks:
+      - gatling
+    ports:
+      - "8083:8083"
+      - "8086:8086"
+      - "2003:2003"
+  grafana:
+    build: grafana
+    env_file: configuration.env
+    networks:
+      - gatling
+    ports:
+      - "3000:3000"
+
+networks:
+  gatling:
+    driver: bridge

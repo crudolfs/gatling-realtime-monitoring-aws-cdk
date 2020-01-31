@@ -1,7 +1,5 @@
 package com.rudolfs.gatling.cdk;
 
-import software.amazon.awscdk.core.Arn;
-import software.amazon.awscdk.core.ArnComponents;
 import software.amazon.awscdk.core.Construct;
 import software.amazon.awscdk.services.ec2.*;
 import software.amazon.awscdk.services.ecr.Repository;
@@ -9,6 +7,7 @@ import software.amazon.awscdk.services.ecr.RepositoryAttributes;
 import software.amazon.awscdk.services.ecs.*;
 import software.amazon.awscdk.services.logs.LogGroup;
 import software.amazon.awscdk.services.logs.RetentionDays;
+import software.amazon.awscdk.services.servicediscovery.DnsRecordType;
 
 public class GatlingMonitoringFargateService extends Construct {
     private final FargateService fargateService;
@@ -20,7 +19,7 @@ public class GatlingMonitoringFargateService extends Construct {
                 .vpc(props.getVpc())
                 .description("grafana and influxdb security group")
                 .build());
-        securityGroup.addIngressRule(Peer.anyIpv4(), Port.tcp(8083), "The default port that runs the InfluxDB Admin UI.");
+        securityGroup.addIngressRule(Peer.anyIpv4(), Port.tcp(3000), "The default port that runs the Grafana UI.");
         securityGroup.addIngressRule(Peer.anyIpv4(), Port.tcp(8086), "The default port that runs the InfluxDB HTTP service.");
         securityGroup.addIngressRule(Peer.anyIpv4(), Port.tcp(2003), "The default port that runs the Graphite service.");
 
@@ -51,8 +50,14 @@ public class GatlingMonitoringFargateService extends Construct {
                 .serviceName("grafana-influxdb")
                 .taskDefinition(fargateTaskDefinition)
                 .desiredCount(0)
+                .cloudMapOptions(CloudMapOptions.builder()
+                        .cloudMapNamespace(props.getEcsCluster().getDefaultCloudMapNamespace())
+                        .dnsRecordType(DnsRecordType.A)
+                        .name("grafana")
+                        .build())
                 .cluster(props.getEcsCluster())
                 .securityGroup(securityGroup)
+                .assignPublicIp(true)
                 .vpcSubnets(SubnetSelection.builder()
                         .subnets(props.getVpc().getPublicSubnets())
                         .build())
@@ -74,7 +79,7 @@ public class GatlingMonitoringFargateService extends Construct {
                             Repository.fromRepositoryAttributes(this, "GatlingGrafanaRepository", repositoryAttributes("gatling/grafana", region, accountId))))
                     .logging(LogDriver.awsLogs(AwsLogDriverProps.builder()
                             .logGroup(LogGroup.Builder.create(this, "grafanaFargateLogGroup")
-                                    .logGroupName("/ecs/grafana")
+                                    .logGroupName("/ecs/gatling/grafana")
                                     .retention(RetentionDays.TWO_WEEKS)
                                     .build())
                             .streamPrefix("grafana")
@@ -98,7 +103,7 @@ public class GatlingMonitoringFargateService extends Construct {
                             Repository.fromRepositoryAttributes(this, "GatlingInfluxDBRepository", repositoryAttributes("gatling/influxdb", region, accountId))))
                     .logging(LogDriver.awsLogs(AwsLogDriverProps.builder()
                             .logGroup(LogGroup.Builder.create(this, "influxdbFargateLogGroup")
-                                    .logGroupName("/ecs/influxdb")
+                                    .logGroupName("/ecs/gatling/influxdb")
                                     .retention(RetentionDays.TWO_WEEKS)
                                     .build())
                             .streamPrefix("influxdb")
