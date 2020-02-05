@@ -1,5 +1,8 @@
 package com.rudolfs.gatling.cdk;
 
+import com.rudolfs.gatling.cdk.ecs.GatlingEcrStack;
+import com.rudolfs.gatling.cdk.ecs.GatlingEcsFargateStack;
+import com.rudolfs.gatling.cdk.vpc.SharedVpcStack;
 import software.amazon.awscdk.core.App;
 import software.amazon.awscdk.core.Environment;
 import software.amazon.awscdk.core.StackProps;
@@ -7,6 +10,16 @@ import software.amazon.awscdk.core.StackProps;
 import java.util.Objects;
 
 public class GatlingRealtimeMonitoringCdkApp {
+    private static final String VPC_NAME_SHARED = "shared-vpc";
+    private static final String ECS_CLUSTER_NAME = "gatling-realtime-monitoring";
+    private static final String CLOUDMAP_NAMESPACE = "gatling-realtime-monitoring.com";
+    private static final String CLUSTER_NAMESPACE = "gatling";
+    private static final String GATLING_RUNNER_SERVICE_NAME = "gatling-runner";
+    private static final String GATLING_MONITORING_SERVICE_NAME = "gatling-monitoring";
+    private static final String GATLING_MONITORING_SERVICE_DISCOVERY_SERVICE_NAME = "dashboard";
+    private static final String GRAFANA_SERVICE_NAME = "grafana";
+    private static final String INFLUXDB_SERVICE_NAME = "influxdb";
+
     public static void main(final String[] args) {
         App app = new App();
 
@@ -20,9 +33,26 @@ public class GatlingRealtimeMonitoringCdkApp {
                         .build())
                 .build();
 
-        new SharedVpcStack(app, "SharedVpcStack", stackProps);
-        new GatlingEcrStack(app, "GatlingEcrStack", stackProps);
-        new GatlingEcsFargateStack(app, "GatlingEcsFargateStack", stackProps);
+        SharedVpcStack.builder().scope(app).id("SharedVpcStack").stackProps(stackProps)
+                .vpcName(VPC_NAME_SHARED)
+                .build();
+
+        GatlingEcrStack.builder().scope(app).id("GatlingEcrStack").stackProps(stackProps)
+                .repositoryNamespace(CLUSTER_NAMESPACE)
+                .gatlingRunnerRepositoryName(GATLING_RUNNER_SERVICE_NAME)
+                .grafanaRepositoryName(GRAFANA_SERVICE_NAME)
+                .influxDBRepositoryName(INFLUXDB_SERVICE_NAME)
+                .build();
+
+        GatlingEcsFargateStack.builder().scope(app).id("GatlingEcsFargateStack").stackProps(stackProps)
+                .cloudMapNamespace(CLOUDMAP_NAMESPACE)
+                .ecsClusterName(ECS_CLUSTER_NAME)
+                .gatlingRunnerServiceName(GATLING_RUNNER_SERVICE_NAME)
+                .gatlingMonitoringServiceName(GATLING_MONITORING_SERVICE_NAME)
+                .gatlingMonitoringServiceDiscoveryServiceName(GATLING_MONITORING_SERVICE_DISCOVERY_SERVICE_NAME)
+                .clusterNamespace(CLUSTER_NAMESPACE)
+                .vpcName(VPC_NAME_SHARED)
+                .build();
 
         app.synth();
     }

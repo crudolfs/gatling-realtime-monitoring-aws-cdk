@@ -1,4 +1,4 @@
-package com.rudolfs.gatling.cdk;
+package com.rudolfs.gatling.cdk.ecs;
 
 import software.amazon.awscdk.core.Construct;
 import software.amazon.awscdk.services.iam.*;

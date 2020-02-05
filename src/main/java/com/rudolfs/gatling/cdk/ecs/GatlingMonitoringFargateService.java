@@ -1,4 +1,4 @@
-package com.rudolfs.gatling.cdk;
+package com.rudolfs.gatling.cdk.ecs;
 
 import software.amazon.awscdk.core.Construct;
 import software.amazon.awscdk.services.ec2.*;
@@ -12,11 +12,11 @@ import software.amazon.awscdk.services.servicediscovery.DnsRecordType;
 public class GatlingMonitoringFargateService extends Construct {
     private final FargateService fargateService;
 
-    public GatlingMonitoringFargateService(Construct scope, String id, GatlingFargateServiceProps props) {
+    public GatlingMonitoringFargateService(Construct scope, String id, Builder builder) {
         super(scope, id);
 
         SecurityGroup securityGroup = new SecurityGroup(this, "GrafanaInfluxSecurityGroup", SecurityGroupProps.builder()
-                .vpc(props.getVpc())
+                .vpc(builder.serviceProps.getVpc())
                 .description("grafana and influxdb security group")
                 .build());
         securityGroup.addIngressRule(Peer.anyIpv4(), Port.tcp(3000), "The default port that runs the Grafana UI.");
@@ -26,40 +26,40 @@ public class GatlingMonitoringFargateService extends Construct {
         FargateTaskDefinition fargateTaskDefinition = FargateTaskDefinition.Builder.create(this, "GrafanaInfluxTaskDefinition")
                 .cpu(256)
                 .memoryLimitMiB(512)
-                .executionRole(props.getFargateExecutionRole())
-                .taskRole(props.getFargateTaskRole())
+                .executionRole(builder.serviceProps.getFargateExecutionRole())
+                .taskRole(builder.serviceProps.getFargateTaskRole())
                 .build();
 
         ContainerDefinitionOptions grafanaContainerDefinitionOptions = new GrafanaContainerOptions(
                 this,
                 "GrafanaContainerOptions",
-                props.getStackProps().getEnv().getRegion(),
-                props.getStackProps().getEnv().getAccount())
+                builder.serviceProps.getStackProps().getEnv().getRegion(),
+                builder.serviceProps.getStackProps().getEnv().getAccount())
                 .getContainerDefinitionOptions();
-        fargateTaskDefinition.addContainer("grafanaContainer", grafanaContainerDefinitionOptions);
+        fargateTaskDefinition.addContainer(builder.grafanaContainerName, grafanaContainerDefinitionOptions);
 
         ContainerDefinitionOptions influxContainerDefinitionOptions = new InfluxContainerOptions(
                 this,
                 "InfluxDBContainerOptions",
-                props.getStackProps().getEnv().getRegion(),
-                props.getStackProps().getEnv().getAccount())
+                builder.serviceProps.getStackProps().getEnv().getRegion(),
+                builder.serviceProps.getStackProps().getEnv().getAccount())
                 .getContainerDefinitionOptions();
-        fargateTaskDefinition.addContainer("influxdbContainer", influxContainerDefinitionOptions);
+        fargateTaskDefinition.addContainer(builder.influxDBContainerName, influxContainerDefinitionOptions);
 
         this.fargateService = FargateService.Builder.create(this, id)
-                .serviceName("grafana-influxdb")
+                .serviceName(builder.serviceProps.getServiceName())
                 .taskDefinition(fargateTaskDefinition)
                 .desiredCount(0)
                 .cloudMapOptions(CloudMapOptions.builder()
-                        .cloudMapNamespace(props.getEcsCluster().getDefaultCloudMapNamespace())
+                        .cloudMapNamespace(builder.serviceProps.getEcsCluster().getDefaultCloudMapNamespace())
                         .dnsRecordType(DnsRecordType.A)
-                        .name("grafana")
+                        .name(builder.serviceDiscoveryName)
                         .build())
-                .cluster(props.getEcsCluster())
+                .cluster(builder.serviceProps.getEcsCluster())
                 .securityGroup(securityGroup)
                 .assignPublicIp(true)
                 .vpcSubnets(SubnetSelection.builder()
-                        .subnets(props.getVpc().getPublicSubnets())
+                        .subnets(builder.serviceProps.getVpc().getPublicSubnets())
                         .build())
                 .build();
     }
@@ -121,5 +121,40 @@ public class GatlingMonitoringFargateService extends Construct {
                 .repositoryArn(String.format("arn:aws:ecr:%s:%s:repository/%s", region, accountId, repositoryName))
                 .repositoryName(repositoryName)
                 .build();
+    }
+
+    public static Builder builder() {
+        return new Builder();
+    }
+
+    public static final class Builder {
+        private GatlingFargateServiceProps serviceProps;
+        private String serviceDiscoveryName;
+        private String grafanaContainerName;
+        private String influxDBContainerName;
+
+        public Builder fargateServiceProps(GatlingFargateServiceProps props) {
+            this.serviceProps = props;
+            return this;
+        }
+
+        public Builder serviceDiscoveryName(String serviceDiscoveryName) {
+            this.serviceDiscoveryName = serviceDiscoveryName;
+            return this;
+        }
+
+        public Builder grafanaContainerName(String grafanaContainerName) {
+            this.grafanaContainerName = grafanaContainerName;
+            return this;
+        }
+
+        public Builder influxDBContainerName(String influxDBContainerName) {
+            this.influxDBContainerName = influxDBContainerName;
+            return this;
+        }
+
+        public GatlingMonitoringFargateService build(Construct scope, String id) {
+            return new GatlingMonitoringFargateService(scope, id, this);
+        }
     }
 }

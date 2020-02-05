@@ -1,4 +1,4 @@
-package com.rudolfs.gatling.cdk;
+package com.rudolfs.gatling.cdk.ecs;
 
 import software.amazon.awscdk.core.StackProps;
 import software.amazon.awscdk.services.ec2.IVpc;
@@ -9,6 +9,10 @@ public interface GatlingFargateServiceProps {
     static Builder builder() {
         return new Builder();
     }
+
+    String getServiceName();
+
+    String getClusterNamespace();
 
     IVpc getVpc();
 
@@ -21,11 +25,23 @@ public interface GatlingFargateServiceProps {
     StackProps getStackProps();
 
     class Builder {
+        private String serviceName;
+        private String clusterNamespace;
         private IVpc vpc;
         private ICluster ecsCluster;
         private Role fargateExecutionRole;
         private Role fargateTaskRole;
         private StackProps stackProps;
+
+        public Builder serviceName(final String serviceName) {
+            this.serviceName = serviceName;
+            return this;
+        }
+
+        public Builder clusterNamespace(final String clusterNamespace) {
+            this.clusterNamespace = clusterNamespace;
+            return this;
+        }
 
         public Builder vpc(final IVpc vpc) {
             this.vpc = vpc;
@@ -54,6 +70,16 @@ public interface GatlingFargateServiceProps {
 
         GatlingFargateServiceProps build() {
             return new GatlingFargateServiceProps() {
+                @Override
+                public String getServiceName() {
+                    return serviceName;
+                }
+
+                @Override
+                public String getClusterNamespace() {
+                    return clusterNamespace;
+                }
+
                 @Override
                 public IVpc getVpc() {
                     return vpc;
