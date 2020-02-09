@@ -15,6 +15,10 @@ Run:
 Stop:
 `docker-compose down`
 
+#### Gatling Dashboard UI:
+Open a browser at http://localhost:3000 (default login: admin/admin).
+
+
 ### AWS ECS Fargate
 Build: build the infra with AWS CDK as explained [here](../aws-cdk/README.md).
 
@@ -29,6 +33,3 @@ Stop:
 aws ecs update-service --cluster gatling-realtime-monitoring --service gatling-runner --desired-count 0`
 aws ecs update-service --cluster gatling-realtime-monitoring --service gatling-monitoring --desired-count 0`
 ```
-
-## Gatling Dashboard UI
-Local: open a browser at http://localhost:3000 (default login: admin/admin).
