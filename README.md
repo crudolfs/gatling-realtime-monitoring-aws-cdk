@@ -1,5 +1,5 @@
 # Gatling Realtime Monitoring in AWS ECS
-This repository contains the infrastructure as code and Docker images for a Gatling setup with support for realtime monitoring (as 
+This repository contains the AWS infrastructure as code and Docker images for a Gatling setup with support for realtime monitoring (as 
 described [here](https://gatling.io/docs/current/realtime_monitoring/)).
 
 ## Architecture
