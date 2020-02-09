@@ -1,6 +1,6 @@
-#!/bin/bash
+#!/bin/sh
 
-function help_text {
+help_text() {
     cat <<EOF
     Usage: $0 [ -gh | --graphitehost GATLING_GRAPHITE_HOST ] [ -gp | --graphiteport GATLING_GRAPHITE_PORT ] [--help]
         --graphitehost GATLING_GRAPHITE_HOST         (optional) The host where the Graphite service is located.

@@ -12,7 +12,6 @@ FROM openjdk:8-jre-alpine
 WORKDIR /usr/app
 
 COPY --from=build /usr/build/target/gatling-runner-1.0-SNAPSHOT.jar ./gatling-runner.jar
+COPY ./run.sh ./run.sh
 
-#ENTRYPOINT ["java", "-DGATLING_GRAPHITE_HOST=grafana.gatling-monitoring.com", "-jar", "gatling-runner.jar", "-s", "simulations.BasicSimulation"]
 ENTRYPOINT ["./run.sh"]
-#CMD ["/bin/sh"]

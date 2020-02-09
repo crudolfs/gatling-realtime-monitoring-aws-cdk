@@ -1,26 +1,16 @@
-# AWS CDK project for Gatling realtime monitoring on AWS ECS
+# Gatling Realtime Monitoring in AWS ECS
+This repository contains the infrastructure as code and Docker images for a Gatling setup with support for realtime monitoring (as 
+described [here](https://gatling.io/docs/current/realtime_monitoring/)).
 
-The `cdk.json` file tells the CDK Toolkit how to execute your app.
+## Architecture
+![architecture](images/gatling-realtime-monitoring-architecture.png "gatling realtime monitoring architecture overview")
 
-It is a [Maven](https://maven.apache.org/) based project, so you can open this project with any Maven compatible Java IDE to build and run tests.
+## Infrastructure as code
+AWS CDK (Cloud Development Kit) is used to generate the CloudFormation and can be found in [aws-cdk](aws-cdk).
+See the [README](aws-cdk/README.md) for more information.
 
-## Useful commands
+## Docker images
+The custom docker images for Grafana, InfluxDB and Gatling can be found in [gatling-monitoring](gatling-monitoring).
+See the [README](gatling-monitoring/README.md) for more information.
 
- * `mvn package`     compile and run tests
- * `cdk ls`          list all stacks in the app
- * `cdk synth`       emits the synthesized CloudFormation template
- * `cdk deploy`      deploy this stack to your default AWS account/region
- * `cdk diff`        compare deployed stack with current state
- * `cdk docs`        open CDK documentation
 
-## Project specific commands
- * `cdk ls --profile <profile-name>`
- * `cdk synth SharedVpcStack --profile <profile-name>`
- * `cdk synth GatlingEcrStack --profile <profile-name>`
- * `cdk deploy SharedVpcStack --profile <profile-name>`
- * `cdk deploy GatlingEcrStack --profile <profile-name>`
- 
- Stack order:
- 1. SharedVpcStack
- 2. GatlingEcrStack
- 3. GatlingEcsFargateStack
