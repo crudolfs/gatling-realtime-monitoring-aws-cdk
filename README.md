@@ -3,7 +3,7 @@ This repository contains the AWS infrastructure as code and Docker images for a 
 described [here](https://gatling.io/docs/current/realtime_monitoring/)).
 
 ## Architecture
-![architecture](images/gatling-realtime-monitoring-architecture.png "gatling realtime monitoring architecture overview")
+![architecture](doc/images/gatling-realtime-monitoring-architecture.png "gatling realtime monitoring architecture overview")
 
 ## Infrastructure as code
 AWS CDK (Cloud Development Kit) is used to generate the CloudFormation and can be found in [aws-cdk](aws-cdk).
