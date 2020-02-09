@@ -1,0 +1,386 @@
+Resources:
+  SharedVpc96F0F614:
+    Type: AWS::EC2::VPC
+    Properties:
+      CidrBlock: 10.12.0.0/16
+      EnableDnsHostnames: true
+      EnableDnsSupport: true
+      InstanceTenancy: default
+      Tags:
+        - Key: Name
+          Value: shared-vpc
+    Metadata:
+      aws:cdk:path: SharedVpcStack/SharedVpc/Resource
+  SharedVpcsharedprivatesubnetSubnet1SubnetC11D1273:
+    Type: AWS::EC2::Subnet
+    Properties:
+      CidrBlock: 10.12.0.0/19
+      VpcId:
+        Ref: SharedVpc96F0F614
+      AvailabilityZone: eu-west-1a
+      MapPublicIpOnLaunch: false
+      Tags:
+        - Key: Name
+          Value: SharedVpcStack/SharedVpc/shared-private-subnetSubnet1
+        - Key: aws-cdk:subnet-name
+          Value: shared-private-subnet
+        - Key: aws-cdk:subnet-type
+          Value: Private
+    Metadata:
+      aws:cdk:path: SharedVpcStack/SharedVpc/shared-private-subnetSubnet1/Subnet
+  SharedVpcsharedprivatesubnetSubnet1RouteTableF28B52FF:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      VpcId:
+        Ref: SharedVpc96F0F614
+      Tags:
+        - Key: Name
+          Value: SharedVpcStack/SharedVpc/shared-private-subnetSubnet1
+    Metadata:
+      aws:cdk:path: SharedVpcStack/SharedVpc/shared-private-subnetSubnet1/RouteTable
+  SharedVpcsharedprivatesubnetSubnet1RouteTableAssociationCF230A4D:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      RouteTableId:
+        Ref: SharedVpcsharedprivatesubnetSubnet1RouteTableF28B52FF
+      SubnetId:
+        Ref: SharedVpcsharedprivatesubnetSubnet1SubnetC11D1273
+    Metadata:
+      aws:cdk:path: SharedVpcStack/SharedVpc/shared-private-subnetSubnet1/RouteTableAssociation
+  SharedVpcsharedprivatesubnetSubnet1DefaultRouteBC32921A:
+    Type: AWS::EC2::Route
+    Properties:
+      RouteTableId:
+        Ref: SharedVpcsharedprivatesubnetSubnet1RouteTableF28B52FF
+      DestinationCidrBlock: 0.0.0.0/0
+      NatGatewayId:
+        Ref: SharedVpcsharedpublicsubnetSubnet1NATGatewayF833BEE7
+    Metadata:
+      aws:cdk:path: SharedVpcStack/SharedVpc/shared-private-subnetSubnet1/DefaultRoute
+  SharedVpcsharedprivatesubnetSubnet2SubnetFA820FA9:
+    Type: AWS::EC2::Subnet
+    Properties:
+      CidrBlock: 10.12.32.0/19
+      VpcId:
+        Ref: SharedVpc96F0F614
+      AvailabilityZone: eu-west-1b
+      MapPublicIpOnLaunch: false
+      Tags:
+        - Key: Name
+          Value: SharedVpcStack/SharedVpc/shared-private-subnetSubnet2
+        - Key: aws-cdk:subnet-name
+          Value: shared-private-subnet
+        - Key: aws-cdk:subnet-type
+          Value: Private
+    Metadata:
+      aws:cdk:path: SharedVpcStack/SharedVpc/shared-private-subnetSubnet2/Subnet
+  SharedVpcsharedprivatesubnetSubnet2RouteTableB7091F64:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      VpcId:
+        Ref: SharedVpc96F0F614
+      Tags:
+        - Key: Name
+          Value: SharedVpcStack/SharedVpc/shared-private-subnetSubnet2
+    Metadata:
+      aws:cdk:path: SharedVpcStack/SharedVpc/shared-private-subnetSubnet2/RouteTable
+  SharedVpcsharedprivatesubnetSubnet2RouteTableAssociation38E6BE4D:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      RouteTableId:
+        Ref: SharedVpcsharedprivatesubnetSubnet2RouteTableB7091F64
+      SubnetId:
+        Ref: SharedVpcsharedprivatesubnetSubnet2SubnetFA820FA9
+    Metadata:
+      aws:cdk:path: SharedVpcStack/SharedVpc/shared-private-subnetSubnet2/RouteTableAssociation
+  SharedVpcsharedprivatesubnetSubnet2DefaultRoute1D68E9DD:
+    Type: AWS::EC2::Route
+    Properties:
+      RouteTableId:
+        Ref: SharedVpcsharedprivatesubnetSubnet2RouteTableB7091F64
+      DestinationCidrBlock: 0.0.0.0/0
+      NatGatewayId:
+        Ref: SharedVpcsharedpublicsubnetSubnet2NATGateway52A1214E
+    Metadata:
+      aws:cdk:path: SharedVpcStack/SharedVpc/shared-private-subnetSubnet2/DefaultRoute
+  SharedVpcsharedprivatesubnetSubnet3SubnetA2A355B2:
+    Type: AWS::EC2::Subnet
+    Properties:
+      CidrBlock: 10.12.64.0/19
+      VpcId:
+        Ref: SharedVpc96F0F614
+      AvailabilityZone: eu-west-1c
+      MapPublicIpOnLaunch: false
+      Tags:
+        - Key: Name
+          Value: SharedVpcStack/SharedVpc/shared-private-subnetSubnet3
+        - Key: aws-cdk:subnet-name
+          Value: shared-private-subnet
+        - Key: aws-cdk:subnet-type
+          Value: Private
+    Metadata:
+      aws:cdk:path: SharedVpcStack/SharedVpc/shared-private-subnetSubnet3/Subnet
+  SharedVpcsharedprivatesubnetSubnet3RouteTableDCE3D928:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      VpcId:
+        Ref: SharedVpc96F0F614
+      Tags:
+        - Key: Name
+          Value: SharedVpcStack/SharedVpc/shared-private-subnetSubnet3
+    Metadata:
+      aws:cdk:path: SharedVpcStack/SharedVpc/shared-private-subnetSubnet3/RouteTable
+  SharedVpcsharedprivatesubnetSubnet3RouteTableAssociation64C05D6A:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      RouteTableId:
+        Ref: SharedVpcsharedprivatesubnetSubnet3RouteTableDCE3D928
+      SubnetId:
+        Ref: SharedVpcsharedprivatesubnetSubnet3SubnetA2A355B2
+    Metadata:
+      aws:cdk:path: SharedVpcStack/SharedVpc/shared-private-subnetSubnet3/RouteTableAssociation
+  SharedVpcsharedprivatesubnetSubnet3DefaultRouteE50AB9AF:
+    Type: AWS::EC2::Route
+    Properties:
+      RouteTableId:
+        Ref: SharedVpcsharedprivatesubnetSubnet3RouteTableDCE3D928
+      DestinationCidrBlock: 0.0.0.0/0
+      NatGatewayId:
+        Ref: SharedVpcsharedpublicsubnetSubnet3NATGateway99C12D19
+    Metadata:
+      aws:cdk:path: SharedVpcStack/SharedVpc/shared-private-subnetSubnet3/DefaultRoute
+  SharedVpcsharedpublicsubnetSubnet1Subnet34819CC1:
+    Type: AWS::EC2::Subnet
+    Properties:
+      CidrBlock: 10.12.96.0/20
+      VpcId:
+        Ref: SharedVpc96F0F614
+      AvailabilityZone: eu-west-1a
+      MapPublicIpOnLaunch: true
+      Tags:
+        - Key: Name
+          Value: SharedVpcStack/SharedVpc/shared-public-subnetSubnet1
+        - Key: aws-cdk:subnet-name
+          Value: shared-public-subnet
+        - Key: aws-cdk:subnet-type
+          Value: Public
+    Metadata:
+      aws:cdk:path: SharedVpcStack/SharedVpc/shared-public-subnetSubnet1/Subnet
+  SharedVpcsharedpublicsubnetSubnet1RouteTable35C49B91:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      VpcId:
+        Ref: SharedVpc96F0F614
+      Tags:
+        - Key: Name
+          Value: SharedVpcStack/SharedVpc/shared-public-subnetSubnet1
+    Metadata:
+      aws:cdk:path: SharedVpcStack/SharedVpc/shared-public-subnetSubnet1/RouteTable
+  SharedVpcsharedpublicsubnetSubnet1RouteTableAssociation0840CACD:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      RouteTableId:
+        Ref: SharedVpcsharedpublicsubnetSubnet1RouteTable35C49B91
+      SubnetId:
+        Ref: SharedVpcsharedpublicsubnetSubnet1Subnet34819CC1
+    Metadata:
+      aws:cdk:path: SharedVpcStack/SharedVpc/shared-public-subnetSubnet1/RouteTableAssociation
+  SharedVpcsharedpublicsubnetSubnet1DefaultRoute3CBE9096:
+    Type: AWS::EC2::Route
+    Properties:
+      RouteTableId:
+        Ref: SharedVpcsharedpublicsubnetSubnet1RouteTable35C49B91
+      DestinationCidrBlock: 0.0.0.0/0
+      GatewayId:
+        Ref: SharedVpcIGW869E5885
+    DependsOn:
+      - SharedVpcVPCGW9C69B7A5
+    Metadata:
+      aws:cdk:path: SharedVpcStack/SharedVpc/shared-public-subnetSubnet1/DefaultRoute
+  SharedVpcsharedpublicsubnetSubnet1EIP8E4DB7E3:
+    Type: AWS::EC2::EIP
+    Properties:
+      Domain: vpc
+      Tags:
+        - Key: Name
+          Value: SharedVpcStack/SharedVpc/shared-public-subnetSubnet1
+    Metadata:
+      aws:cdk:path: SharedVpcStack/SharedVpc/shared-public-subnetSubnet1/EIP
+  SharedVpcsharedpublicsubnetSubnet1NATGatewayF833BEE7:
+    Type: AWS::EC2::NatGateway
+    Properties:
+      AllocationId:
+        Fn::GetAtt:
+          - SharedVpcsharedpublicsubnetSubnet1EIP8E4DB7E3
+          - AllocationId
+      SubnetId:
+        Ref: SharedVpcsharedpublicsubnetSubnet1Subnet34819CC1
+      Tags:
+        - Key: Name
+          Value: SharedVpcStack/SharedVpc/shared-public-subnetSubnet1
+    Metadata:
+      aws:cdk:path: SharedVpcStack/SharedVpc/shared-public-subnetSubnet1/NATGateway
+  SharedVpcsharedpublicsubnetSubnet2Subnet44B1D17F:
+    Type: AWS::EC2::Subnet
+    Properties:
+      CidrBlock: 10.12.112.0/20
+      VpcId:
+        Ref: SharedVpc96F0F614
+      AvailabilityZone: eu-west-1b
+      MapPublicIpOnLaunch: true
+      Tags:
+        - Key: Name
+          Value: SharedVpcStack/SharedVpc/shared-public-subnetSubnet2
+        - Key: aws-cdk:subnet-name
+          Value: shared-public-subnet
+        - Key: aws-cdk:subnet-type
+          Value: Public
+    Metadata:
+      aws:cdk:path: SharedVpcStack/SharedVpc/shared-public-subnetSubnet2/Subnet
+  SharedVpcsharedpublicsubnetSubnet2RouteTable06A4F659:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      VpcId:
+        Ref: SharedVpc96F0F614
+      Tags:
+        - Key: Name
+          Value: SharedVpcStack/SharedVpc/shared-public-subnetSubnet2
+    Metadata:
+      aws:cdk:path: SharedVpcStack/SharedVpc/shared-public-subnetSubnet2/RouteTable
+  SharedVpcsharedpublicsubnetSubnet2RouteTableAssociationB750A882:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      RouteTableId:
+        Ref: SharedVpcsharedpublicsubnetSubnet2RouteTable06A4F659
+      SubnetId:
+        Ref: SharedVpcsharedpublicsubnetSubnet2Subnet44B1D17F
+    Metadata:
+      aws:cdk:path: SharedVpcStack/SharedVpc/shared-public-subnetSubnet2/RouteTableAssociation
+  SharedVpcsharedpublicsubnetSubnet2DefaultRoute25A06CFC:
+    Type: AWS::EC2::Route
+    Properties:
+      RouteTableId:
+        Ref: SharedVpcsharedpublicsubnetSubnet2RouteTable06A4F659
+      DestinationCidrBlock: 0.0.0.0/0
+      GatewayId:
+        Ref: SharedVpcIGW869E5885
+    DependsOn:
+      - SharedVpcVPCGW9C69B7A5
+    Metadata:
+      aws:cdk:path: SharedVpcStack/SharedVpc/shared-public-subnetSubnet2/DefaultRoute
+  SharedVpcsharedpublicsubnetSubnet2EIP6415DA34:
+    Type: AWS::EC2::EIP
+    Properties:
+      Domain: vpc
+      Tags:
+        - Key: Name
+          Value: SharedVpcStack/SharedVpc/shared-public-subnetSubnet2
+    Metadata:
+      aws:cdk:path: SharedVpcStack/SharedVpc/shared-public-subnetSubnet2/EIP
+  SharedVpcsharedpublicsubnetSubnet2NATGateway52A1214E:
+    Type: AWS::EC2::NatGateway
+    Properties:
+      AllocationId:
+        Fn::GetAtt:
+          - SharedVpcsharedpublicsubnetSubnet2EIP6415DA34
+          - AllocationId
+      SubnetId:
+        Ref: SharedVpcsharedpublicsubnetSubnet2Subnet44B1D17F
+      Tags:
+        - Key: Name
+          Value: SharedVpcStack/SharedVpc/shared-public-subnetSubnet2
+    Metadata:
+      aws:cdk:path: SharedVpcStack/SharedVpc/shared-public-subnetSubnet2/NATGateway
+  SharedVpcsharedpublicsubnetSubnet3SubnetEFB04CC4:
+    Type: AWS::EC2::Subnet
+    Properties:
+      CidrBlock: 10.12.128.0/20
+      VpcId:
+        Ref: SharedVpc96F0F614
+      AvailabilityZone: eu-west-1c
+      MapPublicIpOnLaunch: true
+      Tags:
+        - Key: Name
+          Value: SharedVpcStack/SharedVpc/shared-public-subnetSubnet3
+        - Key: aws-cdk:subnet-name
+          Value: shared-public-subnet
+        - Key: aws-cdk:subnet-type
+          Value: Public
+    Metadata:
+      aws:cdk:path: SharedVpcStack/SharedVpc/shared-public-subnetSubnet3/Subnet
+  SharedVpcsharedpublicsubnetSubnet3RouteTable2AF52E53:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      VpcId:
+        Ref: SharedVpc96F0F614
+      Tags:
+        - Key: Name
+          Value: SharedVpcStack/SharedVpc/shared-public-subnetSubnet3
+    Metadata:
+      aws:cdk:path: SharedVpcStack/SharedVpc/shared-public-subnetSubnet3/RouteTable
+  SharedVpcsharedpublicsubnetSubnet3RouteTableAssociation481517FA:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      RouteTableId:
+        Ref: SharedVpcsharedpublicsubnetSubnet3RouteTable2AF52E53
+      SubnetId:
+        Ref: SharedVpcsharedpublicsubnetSubnet3SubnetEFB04CC4
+    Metadata:
+      aws:cdk:path: SharedVpcStack/SharedVpc/shared-public-subnetSubnet3/RouteTableAssociation
+  SharedVpcsharedpublicsubnetSubnet3DefaultRoute65710AEF:
+    Type: AWS::EC2::Route
+    Properties:
+      RouteTableId:
+        Ref: SharedVpcsharedpublicsubnetSubnet3RouteTable2AF52E53
+      DestinationCidrBlock: 0.0.0.0/0
+      GatewayId:
+        Ref: SharedVpcIGW869E5885
+    DependsOn:
+      - SharedVpcVPCGW9C69B7A5
+    Metadata:
+      aws:cdk:path: SharedVpcStack/SharedVpc/shared-public-subnetSubnet3/DefaultRoute
+  SharedVpcsharedpublicsubnetSubnet3EIPB3DCC311:
+    Type: AWS::EC2::EIP
+    Properties:
+      Domain: vpc
+      Tags:
+        - Key: Name
+          Value: SharedVpcStack/SharedVpc/shared-public-subnetSubnet3
+    Metadata:
+      aws:cdk:path: SharedVpcStack/SharedVpc/shared-public-subnetSubnet3/EIP
+  SharedVpcsharedpublicsubnetSubnet3NATGateway99C12D19:
+    Type: AWS::EC2::NatGateway
+    Properties:
+      AllocationId:
+        Fn::GetAtt:
+          - SharedVpcsharedpublicsubnetSubnet3EIPB3DCC311
+          - AllocationId
+      SubnetId:
+        Ref: SharedVpcsharedpublicsubnetSubnet3SubnetEFB04CC4
+      Tags:
+        - Key: Name
+          Value: SharedVpcStack/SharedVpc/shared-public-subnetSubnet3
+    Metadata:
+      aws:cdk:path: SharedVpcStack/SharedVpc/shared-public-subnetSubnet3/NATGateway
+  SharedVpcIGW869E5885:
+    Type: AWS::EC2::InternetGateway
+    Properties:
+      Tags:
+        - Key: Name
+          Value: SharedVpcStack/SharedVpc
+    Metadata:
+      aws:cdk:path: SharedVpcStack/SharedVpc/IGW
+  SharedVpcVPCGW9C69B7A5:
+    Type: AWS::EC2::VPCGatewayAttachment
+    Properties:
+      VpcId:
+        Ref: SharedVpc96F0F614
+      InternetGatewayId:
+        Ref: SharedVpcIGW869E5885
+    Metadata:
+      aws:cdk:path: SharedVpcStack/SharedVpc/VPCGW
+  CDKMetadata:
+    Type: AWS::CDK::Metadata
+    Properties:
+      Modules: aws-cdk=1.22.0,@aws-cdk/assets=1.22.0,@aws-cdk/aws-apigateway=1.22.0,@aws-cdk/aws-applicationautoscaling=1.22.0,@aws-cdk/aws-autoscaling=1.22.0,@aws-cdk/aws-autoscaling-common=1.22.0,@aws-cdk/aws-autoscaling-hooktargets=1.22.0,@aws-cdk/aws-certificatemanager=1.22.0,@aws-cdk/aws-cloudformation=1.22.0,@aws-cdk/aws-cloudfront=1.22.0,@aws-cdk/aws-cloudwatch=1.22.0,@aws-cdk/aws-ec2=1.22.0,@aws-cdk/aws-ecr=1.22.0,@aws-cdk/aws-ecr-assets=1.22.0,@aws-cdk/aws-ecs=1.22.0,@aws-cdk/aws-elasticloadbalancing=1.22.0,@aws-cdk/aws-elasticloadbalancingv2=1.22.0,@aws-cdk/aws-events=1.22.0,@aws-cdk/aws-iam=1.22.0,@aws-cdk/aws-kms=1.22.0,@aws-cdk/aws-lambda=1.22.0,@aws-cdk/aws-logs=1.22.0,@aws-cdk/aws-route53=1.22.0,@aws-cdk/aws-route53-targets=1.22.0,@aws-cdk/aws-s3=1.22.0,@aws-cdk/aws-s3-assets=1.22.0,@aws-cdk/aws-sam=1.22.0,@aws-cdk/aws-secretsmanager=1.22.0,@aws-cdk/aws-servicediscovery=1.22.0,@aws-cdk/aws-sns=1.22.0,@aws-cdk/aws-sns-subscriptions=1.22.0,@aws-cdk/aws-sqs=1.22.0,@aws-cdk/aws-ssm=1.22.0,@aws-cdk/core=1.22.0,@aws-cdk/cx-api=1.22.0,@aws-cdk/region-info=1.22.0,jsii-runtime=Java/1.8.0_232
+

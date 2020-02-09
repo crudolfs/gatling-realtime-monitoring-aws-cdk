@@ -1,0 +1,10 @@
+.classpath.txt
+gatling-runner/target
+gatling-runner/*.iml
+.classpath
+.project
+.idea
+.settings
+.vscode
+*.iml
+
