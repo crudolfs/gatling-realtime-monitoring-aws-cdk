@@ -20,7 +20,7 @@ Open a browser at http://localhost:3000 (default login: admin/admin).
 
 
 ### AWS ECS Fargate
-Build: build the infra with AWS CDK as explained [here](../aws-cdk/README.md).
+Build: create the AWS infrastructure with AWS CDK as explained [here](../aws-cdk/README.md).
 
 Run: 
 ```

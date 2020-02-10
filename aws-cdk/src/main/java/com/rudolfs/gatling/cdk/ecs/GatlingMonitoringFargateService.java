@@ -65,7 +65,7 @@ public class GatlingMonitoringFargateService extends Construct {
             super(scope, id);
 
             Map<String, String> environmentVariables = new HashMap<>();
-            environmentVariables.put("INFLUXDB_ACCESS_MODE", "direct");
+            environmentVariables.put("INFLUXDB_ACCESS_MODE", "proxy");
             environmentVariables.put("INFLUXDB_HOST", "localhost");
             environmentVariables.put("INFLUXDB_PORT", "8086");
 
