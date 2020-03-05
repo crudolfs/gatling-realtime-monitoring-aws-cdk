@@ -31,4 +31,4 @@ cdk deploy SharedVpcStack --profile <profile-name>
 cdk deploy GatlingEcrStack --profile <profile-name>
 cdk deploy GatlingEcsFargateStack --profile <profile-name>
 ```
-TODO: this should be automated in an AWS CDK deployment pipeline.
+The deployment of these stacks is automated in a CodePipeline stack (see [aws-cdk-codepipeline](../aws-cdk-pipeline)).

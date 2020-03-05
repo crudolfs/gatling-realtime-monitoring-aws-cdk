@@ -1,4 +1,4 @@
-package com.rudolfs.gatling.cdk;
+package com.rudolfs.gatling.cdk.pipeline;
 
 import com.rudolfs.gatling.cdk.pipeline.GatlingPipelineStack;
 import software.amazon.awscdk.core.App;

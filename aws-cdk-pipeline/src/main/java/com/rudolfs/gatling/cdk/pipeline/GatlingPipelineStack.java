@@ -6,11 +6,8 @@ import software.amazon.awscdk.core.Stack;
 import software.amazon.awscdk.core.StackProps;
 import software.amazon.awscdk.services.codebuild.BuildEnvironment;
 import software.amazon.awscdk.services.codebuild.BuildSpec;
-import software.amazon.awscdk.services.codebuild.GitHubSourceProps;
 import software.amazon.awscdk.services.codebuild.LinuxBuildImage;
 import software.amazon.awscdk.services.codebuild.PipelineProject;
-import software.amazon.awscdk.services.codebuild.Project;
-import software.amazon.awscdk.services.codebuild.Source;
 import software.amazon.awscdk.services.codepipeline.Artifact;
 import software.amazon.awscdk.services.codepipeline.Pipeline;
 import software.amazon.awscdk.services.codepipeline.StageProps;
@@ -18,9 +15,9 @@ import software.amazon.awscdk.services.codepipeline.actions.CloudFormationCreate
 import software.amazon.awscdk.services.codepipeline.actions.CodeBuildAction;
 import software.amazon.awscdk.services.codepipeline.actions.GitHubSourceAction;
 
-import java.util.Arrays;
 import java.util.List;
 
+import static java.util.Arrays.asList;
 import static java.util.Collections.singletonList;
 
 public class GatlingPipelineStack extends Stack {
@@ -62,15 +59,27 @@ public class GatlingPipelineStack extends Stack {
 
         StageProps deployStageProps = StageProps.builder()
                 .stageName("Deploy")
-                .actions(singletonList(CloudFormationCreateUpdateStackAction.Builder.create()
-                        .actionName("EcrCloudFormationDeploy")
-                        .adminPermissions(true)
-                        .stackName("GatlingEcrStack")
-                        .templatePath(cdkBuildOutput.atPath("GatlingEcrStack.template.json"))
-                        .build()))
+                .actions(asList(CloudFormationCreateUpdateStackAction.Builder.create()
+                                .actionName("SharedVpcCloudFormationDeploy")
+                                .adminPermissions(true)
+                                .stackName("SharedVpcStack")
+                                .templatePath(cdkBuildOutput.atPath("SharedVpcStack.template.json"))
+                                .build(),
+                        CloudFormationCreateUpdateStackAction.Builder.create()
+                                .actionName("GatlingEcrCloudFormationDeploy")
+                                .adminPermissions(true)
+                                .stackName("GatlingEcrStack")
+                                .templatePath(cdkBuildOutput.atPath("GatlingEcrStack.template.json"))
+                                .build(),
+                        CloudFormationCreateUpdateStackAction.Builder.create()
+                                .actionName("GatlingEcsFargateCloudFormationDeploy")
+                                .adminPermissions(true)
+                                .stackName("GatlingEcsFargateStack")
+                                .templatePath(cdkBuildOutput.atPath("GatlingEcsFargateStack.template.json"))
+                                .build()))
                 .build();
 
-        List<StageProps> stages = Arrays.asList(sourceStageProps, buildStageProps, deployStageProps);
+        List<StageProps> stages = asList(sourceStageProps, buildStageProps, deployStageProps);
 
         Pipeline.Builder.create(this, "GatlingCICDPipeline")
                 .stages(stages)
