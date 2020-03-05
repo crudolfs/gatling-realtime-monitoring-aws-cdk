@@ -12,6 +12,9 @@ phases:
     commands:
       - echo "pre_build step"
       - cd aws-cdk
+      - npm install -g aws-cdk
+      - cdk --version
+      - mvn -v
       - mvn clean install
 
   build:
