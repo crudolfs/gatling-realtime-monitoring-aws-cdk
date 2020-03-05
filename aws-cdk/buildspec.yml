@@ -29,5 +29,5 @@ phases:
 artifacts:
   files:
     - 'GatlingEcrStack.template.json'
-  base-directory: dist
+  base-directory: aws-cdk/dist
 
