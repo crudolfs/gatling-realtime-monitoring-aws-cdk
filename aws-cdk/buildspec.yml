@@ -11,6 +11,7 @@ phases:
   pre_build:
     commands:
       - echo "pre_build step"
+      - cd aws-cdk
       - mvn clean install
 
   build:
