@@ -1,0 +1,29 @@
+version: 0.2
+
+phases:
+  install:
+    runtime-versions:
+      java: openjdk8
+
+    commands:
+      - echo "install step"
+
+  pre_build:
+    commands:
+      - echo "pre_build step"
+      - mvn clean install
+
+  build:
+    commands:
+      - echo "build started on `date`"
+      - cdk synth GatlingEcrStack -- o dist
+
+  post_build:
+    commands:
+      - echo "post_build step"
+
+artifacts:
+  files:
+    - 'GatlingEcrStack.template.json'
+  base-directory: dist
+
