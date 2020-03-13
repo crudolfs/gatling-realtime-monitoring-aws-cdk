@@ -11,10 +11,9 @@ The architecture for this solution is as follows:
 The infrastructure for this Gatling setup is written in code by leveraging the AWS CDK (Cloud Development Kit). 
 This Gatling solution consists of three applications that will each run inside a Docker container. These Docker containers 
 will be managed by [AWS ECS](https://aws.amazon.com/ecs/) and run by ECS Fargate.
-The AWS CDK cloud components can be found in [aws-cdk](aws-cdk). See the [README](aws-cdk/README.md) for more information.
+The AWS CDK cloud components can be found in the [aws-cdk](./aws-cdk).
 
 ## Docker images
-The custom docker images for Grafana, InfluxDB and Gatling can be found in [gatling-monitoring](gatling-monitoring).
-See the [README](gatling-monitoring/README.md) for more information.
+The custom docker images for Grafana, InfluxDB and Gatling can be found in the [gatling-monitoring](./gatling-monitoring).
 
 

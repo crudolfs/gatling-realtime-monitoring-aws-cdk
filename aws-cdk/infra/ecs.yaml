@@ -1,0 +1,352 @@
+Resources:
+  GatlingRealtimeMonitoringLoadTestFA5622D2:
+    Type: AWS::ECS::Cluster
+    Properties:
+      ClusterName: gatling-realtime-monitoring
+    Metadata:
+      aws:cdk:path: GatlingEcsFargateStack/GatlingRealtimeMonitoringLoadTest/Resource
+  GatlingRealtimeMonitoringLoadTestDefaultServiceDiscoveryNamespaceFFA03AEA:
+    Type: AWS::ServiceDiscovery::PrivateDnsNamespace
+    Properties:
+      Name: gatling-realtime-monitoring.com
+      Vpc: vpc-0db78bbfa8dd03eb3
+    Metadata:
+      aws:cdk:path: GatlingEcsFargateStack/GatlingRealtimeMonitoringLoadTest/DefaultServiceDiscoveryNamespace/Resource
+  FargateEcsExecutionRole3EAA7352:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Statement:
+          - Action: sts:AssumeRole
+            Effect: Allow
+            Principal:
+              Service: ecs-tasks.amazonaws.com
+        Version: "2012-10-17"
+      ManagedPolicyArns:
+        - Fn::Join:
+            - ""
+            - - "arn:"
+              - Ref: AWS::Partition
+              - :iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy
+      RoleName: gatling-ecs-execution-role
+    Metadata:
+      aws:cdk:path: GatlingEcsFargateStack/FargateEcsExecutionRole/Resource
+  FargateEcsExecutionRoleDefaultPolicy8A421BD7:
+    Type: AWS::IAM::Policy
+    Properties:
+      PolicyDocument:
+        Statement:
+          - Action:
+              - ecr:BatchCheckLayerAvailability
+              - ecr:GetDownloadUrlForLayer
+              - ecr:BatchGetImage
+            Effect: Allow
+            Resource: arn:aws:ecr:eu-west-1:056319353359:repository/gatling/grafana
+          - Action: ecr:GetAuthorizationToken
+            Effect: Allow
+            Resource: "*"
+          - Action:
+              - logs:CreateLogStream
+              - logs:PutLogEvents
+            Effect: Allow
+            Resource:
+              Fn::GetAtt:
+                - GrafanaInfluxFargateServiceGrafanaContainerOptionsgrafanaFargateLogGroup29CE72C9
+                - Arn
+          - Action:
+              - ecr:BatchCheckLayerAvailability
+              - ecr:GetDownloadUrlForLayer
+              - ecr:BatchGetImage
+            Effect: Allow
+            Resource: arn:aws:ecr:eu-west-1:056319353359:repository/gatling/influxdb
+          - Action:
+              - logs:CreateLogStream
+              - logs:PutLogEvents
+            Effect: Allow
+            Resource:
+              Fn::GetAtt:
+                - GrafanaInfluxFargateServiceInfluxDBContainerOptionsinfluxdbFargateLogGroup0EFB9137
+                - Arn
+          - Action:
+              - ecr:BatchCheckLayerAvailability
+              - ecr:GetDownloadUrlForLayer
+              - ecr:BatchGetImage
+            Effect: Allow
+            Resource: arn:aws:ecr:eu-west-1:056319353359:repository/gatling/gatling-runner
+          - Action:
+              - logs:CreateLogStream
+              - logs:PutLogEvents
+            Effect: Allow
+            Resource:
+              Fn::GetAtt:
+                - GatlingRunnerFargateServicegatlingRunnerFargateLogGroup7444D3EB
+                - Arn
+        Version: "2012-10-17"
+      PolicyName: FargateEcsExecutionRoleDefaultPolicy8A421BD7
+      Roles:
+        - Ref: FargateEcsExecutionRole3EAA7352
+    Metadata:
+      aws:cdk:path: GatlingEcsFargateStack/FargateEcsExecutionRole/DefaultPolicy/Resource
+  FargateEcsTaskRoleC1B293E1:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Statement:
+          - Action: sts:AssumeRole
+            Effect: Allow
+            Principal:
+              Service: ecs-tasks.amazonaws.com
+        Version: "2012-10-17"
+      Policies:
+        - PolicyDocument:
+            Statement:
+              - Action: logs:*
+                Effect: Allow
+                Resource: "*"
+            Version: "2012-10-17"
+          PolicyName: cloudwatch-logs
+      RoleName: gatling-ecs-task-role
+    Metadata:
+      aws:cdk:path: GatlingEcsFargateStack/FargateEcsTaskRole/Resource
+  GrafanaInfluxFargateServiceGrafanaInfluxSecurityGroup4D6AE120:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: gatling-monitoring security group
+      SecurityGroupEgress:
+        - CidrIp: 0.0.0.0/0
+          Description: Allow all outbound traffic by default
+          IpProtocol: "-1"
+      SecurityGroupIngress:
+        - CidrIp: 0.0.0.0/0
+          Description: The default port that runs the Grafana UI.
+          FromPort: 3000
+          IpProtocol: tcp
+          ToPort: 3000
+        - CidrIp: 0.0.0.0/0
+          Description: The default port that runs the InfluxDB HTTP service.
+          FromPort: 8086
+          IpProtocol: tcp
+          ToPort: 8086
+        - CidrIp: 0.0.0.0/0
+          Description: The default port that runs the Graphite service.
+          FromPort: 2003
+          IpProtocol: tcp
+          ToPort: 2003
+      VpcId: vpc-0db78bbfa8dd03eb3
+    Metadata:
+      aws:cdk:path: GatlingEcsFargateStack/GrafanaInfluxFargateService/GrafanaInfluxSecurityGroup/Resource
+  GrafanaInfluxFargateServiceGrafanaInfluxTaskDefinitionB835A9D5:
+    Type: AWS::ECS::TaskDefinition
+    Properties:
+      ContainerDefinitions:
+        - Environment:
+            - Name: INFLUXDB_HOST
+              Value: localhost
+            - Name: INFLUXDB_ACCESS_MODE
+              Value: direct
+            - Name: INFLUXDB_PORT
+              Value: "8086"
+          Essential: true
+          Image:
+            Fn::Join:
+              - ""
+              - - 056319353359.dkr.ecr.eu-west-1.
+                - Ref: AWS::URLSuffix
+                - /gatling/grafana:latest
+          LogConfiguration:
+            LogDriver: awslogs
+            Options:
+              awslogs-group:
+                Ref: GrafanaInfluxFargateServiceGrafanaContainerOptionsgrafanaFargateLogGroup29CE72C9
+              awslogs-stream-prefix: grafana
+              awslogs-region: eu-west-1
+          Name: grafana
+        - Essential: true
+          Image:
+            Fn::Join:
+              - ""
+              - - 056319353359.dkr.ecr.eu-west-1.
+                - Ref: AWS::URLSuffix
+                - /gatling/influxdb:latest
+          LogConfiguration:
+            LogDriver: awslogs
+            Options:
+              awslogs-group:
+                Ref: GrafanaInfluxFargateServiceInfluxDBContainerOptionsinfluxdbFargateLogGroup0EFB9137
+              awslogs-stream-prefix: influxdb
+              awslogs-region: eu-west-1
+          Name: influxdb
+      Cpu: "256"
+      ExecutionRoleArn:
+        Fn::GetAtt:
+          - FargateEcsExecutionRole3EAA7352
+          - Arn
+      Family: GatlingEcsFargateStackGrafanaInfluxFargateServiceGrafanaInfluxTaskDefinition0A068B64
+      Memory: "512"
+      NetworkMode: awsvpc
+      RequiresCompatibilities:
+        - FARGATE
+      TaskRoleArn:
+        Fn::GetAtt:
+          - FargateEcsTaskRoleC1B293E1
+          - Arn
+    Metadata:
+      aws:cdk:path: GatlingEcsFargateStack/GrafanaInfluxFargateService/GrafanaInfluxTaskDefinition/Resource
+  GrafanaInfluxFargateServiceGrafanaContainerOptionsgrafanaFargateLogGroup29CE72C9:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      RetentionInDays: 14
+    UpdateReplacePolicy: Retain
+    DeletionPolicy: Retain
+    Metadata:
+      aws:cdk:path: GatlingEcsFargateStack/GrafanaInfluxFargateService/GrafanaContainerOptions/grafanaFargateLogGroup/Resource
+  GrafanaInfluxFargateServiceInfluxDBContainerOptionsinfluxdbFargateLogGroup0EFB9137:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      RetentionInDays: 14
+    UpdateReplacePolicy: Retain
+    DeletionPolicy: Retain
+    Metadata:
+      aws:cdk:path: GatlingEcsFargateStack/GrafanaInfluxFargateService/InfluxDBContainerOptions/influxdbFargateLogGroup/Resource
+  GrafanaInfluxFargateService03088749:
+    Type: AWS::ECS::Service
+    Properties:
+      Cluster:
+        Ref: GatlingRealtimeMonitoringLoadTestFA5622D2
+      DeploymentConfiguration:
+        MaximumPercent: 200
+        MinimumHealthyPercent: 50
+      DesiredCount: 0
+      EnableECSManagedTags: false
+      LaunchType: FARGATE
+      NetworkConfiguration:
+        AwsvpcConfiguration:
+          AssignPublicIp: ENABLED
+          SecurityGroups:
+            - Fn::GetAtt:
+                - GrafanaInfluxFargateServiceGrafanaInfluxSecurityGroup4D6AE120
+                - GroupId
+          Subnets:
+            - subnet-08dd6953a515dad85
+            - subnet-0c73e682f3b278684
+            - subnet-016b933bbdf24cc48
+      ServiceName: gatling-monitoring
+      ServiceRegistries:
+        - RegistryArn:
+            Fn::GetAtt:
+              - GrafanaInfluxFargateServiceCloudmapService9DA0A97B
+              - Arn
+      TaskDefinition:
+        Ref: GrafanaInfluxFargateServiceGrafanaInfluxTaskDefinitionB835A9D5
+    Metadata:
+      aws:cdk:path: GatlingEcsFargateStack/GrafanaInfluxFargateService/GrafanaInfluxFargateService/Service
+  GrafanaInfluxFargateServiceCloudmapService9DA0A97B:
+    Type: AWS::ServiceDiscovery::Service
+    Properties:
+      DnsConfig:
+        DnsRecords:
+          - TTL: 60
+            Type: A
+        NamespaceId:
+          Fn::GetAtt:
+            - GatlingRealtimeMonitoringLoadTestDefaultServiceDiscoveryNamespaceFFA03AEA
+            - Id
+        RoutingPolicy: MULTIVALUE
+      HealthCheckCustomConfig:
+        FailureThreshold: 1
+      Name: gatling-monitoring
+      NamespaceId:
+        Fn::GetAtt:
+          - GatlingRealtimeMonitoringLoadTestDefaultServiceDiscoveryNamespaceFFA03AEA
+          - Id
+    Metadata:
+      aws:cdk:path: GatlingEcsFargateStack/GrafanaInfluxFargateService/GrafanaInfluxFargateService/CloudmapService/Resource
+  GatlingRunnerFargateServiceGatlingRunnerSecurityGroupACBF1111:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: gatling-runner security group
+      SecurityGroupEgress:
+        - CidrIp: 0.0.0.0/0
+          Description: Allow all outbound traffic by default
+          IpProtocol: "-1"
+      VpcId: vpc-0db78bbfa8dd03eb3
+    Metadata:
+      aws:cdk:path: GatlingEcsFargateStack/GatlingRunnerFargateService/GatlingRunnerSecurityGroup/Resource
+  GatlingRunnerFargateServiceGatlingRunnerFargateTaskDefinition24BE91E6:
+    Type: AWS::ECS::TaskDefinition
+    Properties:
+      ContainerDefinitions:
+        - Command:
+            - -gh
+            - gatling-monitoring.gatling-realtime-monitoring.com
+          Essential: true
+          Image:
+            Fn::Join:
+              - ""
+              - - 056319353359.dkr.ecr.eu-west-1.
+                - Ref: AWS::URLSuffix
+                - /gatling/gatling-runner:latest
+          LogConfiguration:
+            LogDriver: awslogs
+            Options:
+              awslogs-group:
+                Ref: GatlingRunnerFargateServicegatlingRunnerFargateLogGroup7444D3EB
+              awslogs-stream-prefix: gatling-runner
+              awslogs-region: eu-west-1
+          Name: gatlingRunnerContainer
+      Cpu: "1024"
+      ExecutionRoleArn:
+        Fn::GetAtt:
+          - FargateEcsExecutionRole3EAA7352
+          - Arn
+      Family: GatlingEcsFargateStackGatlingRunnerFargateServiceGatlingRunnerFargateTaskDefinition9B4279D9
+      Memory: "2048"
+      NetworkMode: awsvpc
+      RequiresCompatibilities:
+        - FARGATE
+      TaskRoleArn:
+        Fn::GetAtt:
+          - FargateEcsTaskRoleC1B293E1
+          - Arn
+    Metadata:
+      aws:cdk:path: GatlingEcsFargateStack/GatlingRunnerFargateService/GatlingRunnerFargateTaskDefinition/Resource
+  GatlingRunnerFargateServicegatlingRunnerFargateLogGroup7444D3EB:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      RetentionInDays: 14
+    UpdateReplacePolicy: Retain
+    DeletionPolicy: Retain
+    Metadata:
+      aws:cdk:path: GatlingEcsFargateStack/GatlingRunnerFargateService/gatlingRunnerFargateLogGroup/Resource
+  GatlingRunnerFargateServiceC616DC3D:
+    Type: AWS::ECS::Service
+    Properties:
+      Cluster:
+        Ref: GatlingRealtimeMonitoringLoadTestFA5622D2
+      DeploymentConfiguration:
+        MaximumPercent: 200
+        MinimumHealthyPercent: 50
+      DesiredCount: 0
+      EnableECSManagedTags: false
+      LaunchType: FARGATE
+      NetworkConfiguration:
+        AwsvpcConfiguration:
+          AssignPublicIp: DISABLED
+          SecurityGroups:
+            - Fn::GetAtt:
+                - GatlingRunnerFargateServiceGatlingRunnerSecurityGroupACBF1111
+                - GroupId
+          Subnets:
+            - subnet-024bae83ed65cfe4c
+            - subnet-0732e2b6fc7c08abb
+            - subnet-04ed7b92a2231b24d
+      ServiceName: gatling-runner
+      TaskDefinition:
+        Ref: GatlingRunnerFargateServiceGatlingRunnerFargateTaskDefinition24BE91E6
+    Metadata:
+      aws:cdk:path: GatlingEcsFargateStack/GatlingRunnerFargateService/GatlingRunnerFargateService/Service
+  CDKMetadata:
+    Type: AWS::CDK::Metadata
+    Properties:
+      Modules: aws-cdk=1.22.0,@aws-cdk/assets=1.22.0,@aws-cdk/aws-apigateway=1.22.0,@aws-cdk/aws-applicationautoscaling=1.22.0,@aws-cdk/aws-autoscaling=1.22.0,@aws-cdk/aws-autoscaling-common=1.22.0,@aws-cdk/aws-autoscaling-hooktargets=1.22.0,@aws-cdk/aws-certificatemanager=1.22.0,@aws-cdk/aws-cloudformation=1.22.0,@aws-cdk/aws-cloudfront=1.22.0,@aws-cdk/aws-cloudwatch=1.22.0,@aws-cdk/aws-ec2=1.22.0,@aws-cdk/aws-ecr=1.22.0,@aws-cdk/aws-ecr-assets=1.22.0,@aws-cdk/aws-ecs=1.22.0,@aws-cdk/aws-elasticloadbalancing=1.22.0,@aws-cdk/aws-elasticloadbalancingv2=1.22.0,@aws-cdk/aws-events=1.22.0,@aws-cdk/aws-iam=1.22.0,@aws-cdk/aws-kms=1.22.0,@aws-cdk/aws-lambda=1.22.0,@aws-cdk/aws-logs=1.22.0,@aws-cdk/aws-route53=1.22.0,@aws-cdk/aws-route53-targets=1.22.0,@aws-cdk/aws-s3=1.22.0,@aws-cdk/aws-s3-assets=1.22.0,@aws-cdk/aws-sam=1.22.0,@aws-cdk/aws-secretsmanager=1.22.0,@aws-cdk/aws-servicediscovery=1.22.0,@aws-cdk/aws-sns=1.22.0,@aws-cdk/aws-sns-subscriptions=1.22.0,@aws-cdk/aws-sqs=1.22.0,@aws-cdk/aws-ssm=1.22.0,@aws-cdk/core=1.22.0,@aws-cdk/cx-api=1.22.0,@aws-cdk/region-info=1.22.0,jsii-runtime=Java/1.8.0_232
+

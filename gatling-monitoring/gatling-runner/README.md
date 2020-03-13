@@ -10,7 +10,11 @@ The Gatling runner can be built as follows:
 
 A Gatling test run can be started as follows: 
 
-`docker run --rm --name gatling-runner --network gatling-monitoring_gatling gatling-runner -gh gatling-monitoring_influxdb_1 -gp 2003`
+```
+docker run --rm --name gatling-runner \
+--network gatling-monitoring_gatling gatling-runner \
+-gh gatling-monitoring_influxdb_1 -gp 2003
+```
 
 The --network parameter is required to communicate with InfluxDB which is started via [docker-compose](../docker-compose.yml).  
 The -gh and -gp options indicate the GATLING_GRAPHITE_HOST and GATLING_GRAPHITE_PORT respectively which is needed to communicate with InfluxDB.

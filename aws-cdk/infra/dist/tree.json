@@ -1,0 +1,1584 @@
+{
+  "version": "tree-0.1",
+  "tree": {
+    "id": "App",
+    "path": "",
+    "children": {
+      "Tree": {
+        "id": "Tree",
+        "path": "Tree"
+      },
+      "SharedVpcStack": {
+        "id": "SharedVpcStack",
+        "path": "SharedVpcStack",
+        "children": {
+          "SharedVpc": {
+            "id": "SharedVpc",
+            "path": "SharedVpcStack/SharedVpc",
+            "children": {
+              "Resource": {
+                "id": "Resource",
+                "path": "SharedVpcStack/SharedVpc/Resource",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::EC2::VPC",
+                  "aws:cdk:cloudformation:props": {
+                    "cidrBlock": "10.12.0.0/16",
+                    "enableDnsHostnames": true,
+                    "enableDnsSupport": true,
+                    "instanceTenancy": "default",
+                    "tags": [
+                      {
+                        "key": "Name",
+                        "value": "shared-vpc"
+                      }
+                    ]
+                  }
+                }
+              },
+              "shared-private-subnetSubnet1": {
+                "id": "shared-private-subnetSubnet1",
+                "path": "SharedVpcStack/SharedVpc/shared-private-subnetSubnet1",
+                "children": {
+                  "Subnet": {
+                    "id": "Subnet",
+                    "path": "SharedVpcStack/SharedVpc/shared-private-subnetSubnet1/Subnet",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::EC2::Subnet",
+                      "aws:cdk:cloudformation:props": {
+                        "cidrBlock": "10.12.0.0/19",
+                        "vpcId": {
+                          "Ref": "SharedVpc96F0F614"
+                        },
+                        "availabilityZone": "eu-west-1a",
+                        "mapPublicIpOnLaunch": false,
+                        "tags": [
+                          {
+                            "key": "Name",
+                            "value": "SharedVpcStack/SharedVpc/shared-private-subnetSubnet1"
+                          },
+                          {
+                            "key": "aws-cdk:subnet-name",
+                            "value": "shared-private-subnet"
+                          },
+                          {
+                            "key": "aws-cdk:subnet-type",
+                            "value": "Private"
+                          }
+                        ]
+                      }
+                    }
+                  },
+                  "Acl": {
+                    "id": "Acl",
+                    "path": "SharedVpcStack/SharedVpc/shared-private-subnetSubnet1/Acl"
+                  },
+                  "RouteTable": {
+                    "id": "RouteTable",
+                    "path": "SharedVpcStack/SharedVpc/shared-private-subnetSubnet1/RouteTable",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::EC2::RouteTable",
+                      "aws:cdk:cloudformation:props": {
+                        "vpcId": {
+                          "Ref": "SharedVpc96F0F614"
+                        },
+                        "tags": [
+                          {
+                            "key": "Name",
+                            "value": "SharedVpcStack/SharedVpc/shared-private-subnetSubnet1"
+                          }
+                        ]
+                      }
+                    }
+                  },
+                  "RouteTableAssociation": {
+                    "id": "RouteTableAssociation",
+                    "path": "SharedVpcStack/SharedVpc/shared-private-subnetSubnet1/RouteTableAssociation",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::EC2::SubnetRouteTableAssociation",
+                      "aws:cdk:cloudformation:props": {
+                        "routeTableId": {
+                          "Ref": "SharedVpcsharedprivatesubnetSubnet1RouteTableF28B52FF"
+                        },
+                        "subnetId": {
+                          "Ref": "SharedVpcsharedprivatesubnetSubnet1SubnetC11D1273"
+                        }
+                      }
+                    }
+                  },
+                  "DefaultRoute": {
+                    "id": "DefaultRoute",
+                    "path": "SharedVpcStack/SharedVpc/shared-private-subnetSubnet1/DefaultRoute",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::EC2::Route",
+                      "aws:cdk:cloudformation:props": {
+                        "routeTableId": {
+                          "Ref": "SharedVpcsharedprivatesubnetSubnet1RouteTableF28B52FF"
+                        },
+                        "destinationCidrBlock": "0.0.0.0/0",
+                        "natGatewayId": {
+                          "Ref": "SharedVpcsharedpublicsubnetSubnet1NATGatewayF833BEE7"
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "shared-private-subnetSubnet2": {
+                "id": "shared-private-subnetSubnet2",
+                "path": "SharedVpcStack/SharedVpc/shared-private-subnetSubnet2",
+                "children": {
+                  "Subnet": {
+                    "id": "Subnet",
+                    "path": "SharedVpcStack/SharedVpc/shared-private-subnetSubnet2/Subnet",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::EC2::Subnet",
+                      "aws:cdk:cloudformation:props": {
+                        "cidrBlock": "10.12.32.0/19",
+                        "vpcId": {
+                          "Ref": "SharedVpc96F0F614"
+                        },
+                        "availabilityZone": "eu-west-1b",
+                        "mapPublicIpOnLaunch": false,
+                        "tags": [
+                          {
+                            "key": "Name",
+                            "value": "SharedVpcStack/SharedVpc/shared-private-subnetSubnet2"
+                          },
+                          {
+                            "key": "aws-cdk:subnet-name",
+                            "value": "shared-private-subnet"
+                          },
+                          {
+                            "key": "aws-cdk:subnet-type",
+                            "value": "Private"
+                          }
+                        ]
+                      }
+                    }
+                  },
+                  "Acl": {
+                    "id": "Acl",
+                    "path": "SharedVpcStack/SharedVpc/shared-private-subnetSubnet2/Acl"
+                  },
+                  "RouteTable": {
+                    "id": "RouteTable",
+                    "path": "SharedVpcStack/SharedVpc/shared-private-subnetSubnet2/RouteTable",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::EC2::RouteTable",
+                      "aws:cdk:cloudformation:props": {
+                        "vpcId": {
+                          "Ref": "SharedVpc96F0F614"
+                        },
+                        "tags": [
+                          {
+                            "key": "Name",
+                            "value": "SharedVpcStack/SharedVpc/shared-private-subnetSubnet2"
+                          }
+                        ]
+                      }
+                    }
+                  },
+                  "RouteTableAssociation": {
+                    "id": "RouteTableAssociation",
+                    "path": "SharedVpcStack/SharedVpc/shared-private-subnetSubnet2/RouteTableAssociation",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::EC2::SubnetRouteTableAssociation",
+                      "aws:cdk:cloudformation:props": {
+                        "routeTableId": {
+                          "Ref": "SharedVpcsharedprivatesubnetSubnet2RouteTableB7091F64"
+                        },
+                        "subnetId": {
+                          "Ref": "SharedVpcsharedprivatesubnetSubnet2SubnetFA820FA9"
+                        }
+                      }
+                    }
+                  },
+                  "DefaultRoute": {
+                    "id": "DefaultRoute",
+                    "path": "SharedVpcStack/SharedVpc/shared-private-subnetSubnet2/DefaultRoute",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::EC2::Route",
+                      "aws:cdk:cloudformation:props": {
+                        "routeTableId": {
+                          "Ref": "SharedVpcsharedprivatesubnetSubnet2RouteTableB7091F64"
+                        },
+                        "destinationCidrBlock": "0.0.0.0/0",
+                        "natGatewayId": {
+                          "Ref": "SharedVpcsharedpublicsubnetSubnet2NATGateway52A1214E"
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "shared-private-subnetSubnet3": {
+                "id": "shared-private-subnetSubnet3",
+                "path": "SharedVpcStack/SharedVpc/shared-private-subnetSubnet3",
+                "children": {
+                  "Subnet": {
+                    "id": "Subnet",
+                    "path": "SharedVpcStack/SharedVpc/shared-private-subnetSubnet3/Subnet",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::EC2::Subnet",
+                      "aws:cdk:cloudformation:props": {
+                        "cidrBlock": "10.12.64.0/19",
+                        "vpcId": {
+                          "Ref": "SharedVpc96F0F614"
+                        },
+                        "availabilityZone": "eu-west-1c",
+                        "mapPublicIpOnLaunch": false,
+                        "tags": [
+                          {
+                            "key": "Name",
+                            "value": "SharedVpcStack/SharedVpc/shared-private-subnetSubnet3"
+                          },
+                          {
+                            "key": "aws-cdk:subnet-name",
+                            "value": "shared-private-subnet"
+                          },
+                          {
+                            "key": "aws-cdk:subnet-type",
+                            "value": "Private"
+                          }
+                        ]
+                      }
+                    }
+                  },
+                  "Acl": {
+                    "id": "Acl",
+                    "path": "SharedVpcStack/SharedVpc/shared-private-subnetSubnet3/Acl"
+                  },
+                  "RouteTable": {
+                    "id": "RouteTable",
+                    "path": "SharedVpcStack/SharedVpc/shared-private-subnetSubnet3/RouteTable",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::EC2::RouteTable",
+                      "aws:cdk:cloudformation:props": {
+                        "vpcId": {
+                          "Ref": "SharedVpc96F0F614"
+                        },
+                        "tags": [
+                          {
+                            "key": "Name",
+                            "value": "SharedVpcStack/SharedVpc/shared-private-subnetSubnet3"
+                          }
+                        ]
+                      }
+                    }
+                  },
+                  "RouteTableAssociation": {
+                    "id": "RouteTableAssociation",
+                    "path": "SharedVpcStack/SharedVpc/shared-private-subnetSubnet3/RouteTableAssociation",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::EC2::SubnetRouteTableAssociation",
+                      "aws:cdk:cloudformation:props": {
+                        "routeTableId": {
+                          "Ref": "SharedVpcsharedprivatesubnetSubnet3RouteTableDCE3D928"
+                        },
+                        "subnetId": {
+                          "Ref": "SharedVpcsharedprivatesubnetSubnet3SubnetA2A355B2"
+                        }
+                      }
+                    }
+                  },
+                  "DefaultRoute": {
+                    "id": "DefaultRoute",
+                    "path": "SharedVpcStack/SharedVpc/shared-private-subnetSubnet3/DefaultRoute",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::EC2::Route",
+                      "aws:cdk:cloudformation:props": {
+                        "routeTableId": {
+                          "Ref": "SharedVpcsharedprivatesubnetSubnet3RouteTableDCE3D928"
+                        },
+                        "destinationCidrBlock": "0.0.0.0/0",
+                        "natGatewayId": {
+                          "Ref": "SharedVpcsharedpublicsubnetSubnet3NATGateway99C12D19"
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "shared-public-subnetSubnet1": {
+                "id": "shared-public-subnetSubnet1",
+                "path": "SharedVpcStack/SharedVpc/shared-public-subnetSubnet1",
+                "children": {
+                  "Subnet": {
+                    "id": "Subnet",
+                    "path": "SharedVpcStack/SharedVpc/shared-public-subnetSubnet1/Subnet",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::EC2::Subnet",
+                      "aws:cdk:cloudformation:props": {
+                        "cidrBlock": "10.12.96.0/20",
+                        "vpcId": {
+                          "Ref": "SharedVpc96F0F614"
+                        },
+                        "availabilityZone": "eu-west-1a",
+                        "mapPublicIpOnLaunch": true,
+                        "tags": [
+                          {
+                            "key": "Name",
+                            "value": "SharedVpcStack/SharedVpc/shared-public-subnetSubnet1"
+                          },
+                          {
+                            "key": "aws-cdk:subnet-name",
+                            "value": "shared-public-subnet"
+                          },
+                          {
+                            "key": "aws-cdk:subnet-type",
+                            "value": "Public"
+                          }
+                        ]
+                      }
+                    }
+                  },
+                  "Acl": {
+                    "id": "Acl",
+                    "path": "SharedVpcStack/SharedVpc/shared-public-subnetSubnet1/Acl"
+                  },
+                  "RouteTable": {
+                    "id": "RouteTable",
+                    "path": "SharedVpcStack/SharedVpc/shared-public-subnetSubnet1/RouteTable",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::EC2::RouteTable",
+                      "aws:cdk:cloudformation:props": {
+                        "vpcId": {
+                          "Ref": "SharedVpc96F0F614"
+                        },
+                        "tags": [
+                          {
+                            "key": "Name",
+                            "value": "SharedVpcStack/SharedVpc/shared-public-subnetSubnet1"
+                          }
+                        ]
+                      }
+                    }
+                  },
+                  "RouteTableAssociation": {
+                    "id": "RouteTableAssociation",
+                    "path": "SharedVpcStack/SharedVpc/shared-public-subnetSubnet1/RouteTableAssociation",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::EC2::SubnetRouteTableAssociation",
+                      "aws:cdk:cloudformation:props": {
+                        "routeTableId": {
+                          "Ref": "SharedVpcsharedpublicsubnetSubnet1RouteTable35C49B91"
+                        },
+                        "subnetId": {
+                          "Ref": "SharedVpcsharedpublicsubnetSubnet1Subnet34819CC1"
+                        }
+                      }
+                    }
+                  },
+                  "DefaultRoute": {
+                    "id": "DefaultRoute",
+                    "path": "SharedVpcStack/SharedVpc/shared-public-subnetSubnet1/DefaultRoute",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::EC2::Route",
+                      "aws:cdk:cloudformation:props": {
+                        "routeTableId": {
+                          "Ref": "SharedVpcsharedpublicsubnetSubnet1RouteTable35C49B91"
+                        },
+                        "destinationCidrBlock": "0.0.0.0/0",
+                        "gatewayId": {
+                          "Ref": "SharedVpcIGW869E5885"
+                        }
+                      }
+                    }
+                  },
+                  "EIP": {
+                    "id": "EIP",
+                    "path": "SharedVpcStack/SharedVpc/shared-public-subnetSubnet1/EIP",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::EC2::EIP",
+                      "aws:cdk:cloudformation:props": {
+                        "domain": "vpc",
+                        "tags": [
+                          {
+                            "key": "Name",
+                            "value": "SharedVpcStack/SharedVpc/shared-public-subnetSubnet1"
+                          }
+                        ]
+                      }
+                    }
+                  },
+                  "NATGateway": {
+                    "id": "NATGateway",
+                    "path": "SharedVpcStack/SharedVpc/shared-public-subnetSubnet1/NATGateway",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::EC2::NatGateway",
+                      "aws:cdk:cloudformation:props": {
+                        "allocationId": {
+                          "Fn::GetAtt": [
+                            "SharedVpcsharedpublicsubnetSubnet1EIP8E4DB7E3",
+                            "AllocationId"
+                          ]
+                        },
+                        "subnetId": {
+                          "Ref": "SharedVpcsharedpublicsubnetSubnet1Subnet34819CC1"
+                        },
+                        "tags": [
+                          {
+                            "key": "Name",
+                            "value": "SharedVpcStack/SharedVpc/shared-public-subnetSubnet1"
+                          }
+                        ]
+                      }
+                    }
+                  }
+                }
+              },
+              "shared-public-subnetSubnet2": {
+                "id": "shared-public-subnetSubnet2",
+                "path": "SharedVpcStack/SharedVpc/shared-public-subnetSubnet2",
+                "children": {
+                  "Subnet": {
+                    "id": "Subnet",
+                    "path": "SharedVpcStack/SharedVpc/shared-public-subnetSubnet2/Subnet",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::EC2::Subnet",
+                      "aws:cdk:cloudformation:props": {
+                        "cidrBlock": "10.12.112.0/20",
+                        "vpcId": {
+                          "Ref": "SharedVpc96F0F614"
+                        },
+                        "availabilityZone": "eu-west-1b",
+                        "mapPublicIpOnLaunch": true,
+                        "tags": [
+                          {
+                            "key": "Name",
+                            "value": "SharedVpcStack/SharedVpc/shared-public-subnetSubnet2"
+                          },
+                          {
+                            "key": "aws-cdk:subnet-name",
+                            "value": "shared-public-subnet"
+                          },
+                          {
+                            "key": "aws-cdk:subnet-type",
+                            "value": "Public"
+                          }
+                        ]
+                      }
+                    }
+                  },
+                  "Acl": {
+                    "id": "Acl",
+                    "path": "SharedVpcStack/SharedVpc/shared-public-subnetSubnet2/Acl"
+                  },
+                  "RouteTable": {
+                    "id": "RouteTable",
+                    "path": "SharedVpcStack/SharedVpc/shared-public-subnetSubnet2/RouteTable",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::EC2::RouteTable",
+                      "aws:cdk:cloudformation:props": {
+                        "vpcId": {
+                          "Ref": "SharedVpc96F0F614"
+                        },
+                        "tags": [
+                          {
+                            "key": "Name",
+                            "value": "SharedVpcStack/SharedVpc/shared-public-subnetSubnet2"
+                          }
+                        ]
+                      }
+                    }
+                  },
+                  "RouteTableAssociation": {
+                    "id": "RouteTableAssociation",
+                    "path": "SharedVpcStack/SharedVpc/shared-public-subnetSubnet2/RouteTableAssociation",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::EC2::SubnetRouteTableAssociation",
+                      "aws:cdk:cloudformation:props": {
+                        "routeTableId": {
+                          "Ref": "SharedVpcsharedpublicsubnetSubnet2RouteTable06A4F659"
+                        },
+                        "subnetId": {
+                          "Ref": "SharedVpcsharedpublicsubnetSubnet2Subnet44B1D17F"
+                        }
+                      }
+                    }
+                  },
+                  "DefaultRoute": {
+                    "id": "DefaultRoute",
+                    "path": "SharedVpcStack/SharedVpc/shared-public-subnetSubnet2/DefaultRoute",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::EC2::Route",
+                      "aws:cdk:cloudformation:props": {
+                        "routeTableId": {
+                          "Ref": "SharedVpcsharedpublicsubnetSubnet2RouteTable06A4F659"
+                        },
+                        "destinationCidrBlock": "0.0.0.0/0",
+                        "gatewayId": {
+                          "Ref": "SharedVpcIGW869E5885"
+                        }
+                      }
+                    }
+                  },
+                  "EIP": {
+                    "id": "EIP",
+                    "path": "SharedVpcStack/SharedVpc/shared-public-subnetSubnet2/EIP",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::EC2::EIP",
+                      "aws:cdk:cloudformation:props": {
+                        "domain": "vpc",
+                        "tags": [
+                          {
+                            "key": "Name",
+                            "value": "SharedVpcStack/SharedVpc/shared-public-subnetSubnet2"
+                          }
+                        ]
+                      }
+                    }
+                  },
+                  "NATGateway": {
+                    "id": "NATGateway",
+                    "path": "SharedVpcStack/SharedVpc/shared-public-subnetSubnet2/NATGateway",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::EC2::NatGateway",
+                      "aws:cdk:cloudformation:props": {
+                        "allocationId": {
+                          "Fn::GetAtt": [
+                            "SharedVpcsharedpublicsubnetSubnet2EIP6415DA34",
+                            "AllocationId"
+                          ]
+                        },
+                        "subnetId": {
+                          "Ref": "SharedVpcsharedpublicsubnetSubnet2Subnet44B1D17F"
+                        },
+                        "tags": [
+                          {
+                            "key": "Name",
+                            "value": "SharedVpcStack/SharedVpc/shared-public-subnetSubnet2"
+                          }
+                        ]
+                      }
+                    }
+                  }
+                }
+              },
+              "shared-public-subnetSubnet3": {
+                "id": "shared-public-subnetSubnet3",
+                "path": "SharedVpcStack/SharedVpc/shared-public-subnetSubnet3",
+                "children": {
+                  "Subnet": {
+                    "id": "Subnet",
+                    "path": "SharedVpcStack/SharedVpc/shared-public-subnetSubnet3/Subnet",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::EC2::Subnet",
+                      "aws:cdk:cloudformation:props": {
+                        "cidrBlock": "10.12.128.0/20",
+                        "vpcId": {
+                          "Ref": "SharedVpc96F0F614"
+                        },
+                        "availabilityZone": "eu-west-1c",
+                        "mapPublicIpOnLaunch": true,
+                        "tags": [
+                          {
+                            "key": "Name",
+                            "value": "SharedVpcStack/SharedVpc/shared-public-subnetSubnet3"
+                          },
+                          {
+                            "key": "aws-cdk:subnet-name",
+                            "value": "shared-public-subnet"
+                          },
+                          {
+                            "key": "aws-cdk:subnet-type",
+                            "value": "Public"
+                          }
+                        ]
+                      }
+                    }
+                  },
+                  "Acl": {
+                    "id": "Acl",
+                    "path": "SharedVpcStack/SharedVpc/shared-public-subnetSubnet3/Acl"
+                  },
+                  "RouteTable": {
+                    "id": "RouteTable",
+                    "path": "SharedVpcStack/SharedVpc/shared-public-subnetSubnet3/RouteTable",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::EC2::RouteTable",
+                      "aws:cdk:cloudformation:props": {
+                        "vpcId": {
+                          "Ref": "SharedVpc96F0F614"
+                        },
+                        "tags": [
+                          {
+                            "key": "Name",
+                            "value": "SharedVpcStack/SharedVpc/shared-public-subnetSubnet3"
+                          }
+                        ]
+                      }
+                    }
+                  },
+                  "RouteTableAssociation": {
+                    "id": "RouteTableAssociation",
+                    "path": "SharedVpcStack/SharedVpc/shared-public-subnetSubnet3/RouteTableAssociation",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::EC2::SubnetRouteTableAssociation",
+                      "aws:cdk:cloudformation:props": {
+                        "routeTableId": {
+                          "Ref": "SharedVpcsharedpublicsubnetSubnet3RouteTable2AF52E53"
+                        },
+                        "subnetId": {
+                          "Ref": "SharedVpcsharedpublicsubnetSubnet3SubnetEFB04CC4"
+                        }
+                      }
+                    }
+                  },
+                  "DefaultRoute": {
+                    "id": "DefaultRoute",
+                    "path": "SharedVpcStack/SharedVpc/shared-public-subnetSubnet3/DefaultRoute",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::EC2::Route",
+                      "aws:cdk:cloudformation:props": {
+                        "routeTableId": {
+                          "Ref": "SharedVpcsharedpublicsubnetSubnet3RouteTable2AF52E53"
+                        },
+                        "destinationCidrBlock": "0.0.0.0/0",
+                        "gatewayId": {
+                          "Ref": "SharedVpcIGW869E5885"
+                        }
+                      }
+                    }
+                  },
+                  "EIP": {
+                    "id": "EIP",
+                    "path": "SharedVpcStack/SharedVpc/shared-public-subnetSubnet3/EIP",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::EC2::EIP",
+                      "aws:cdk:cloudformation:props": {
+                        "domain": "vpc",
+                        "tags": [
+                          {
+                            "key": "Name",
+                            "value": "SharedVpcStack/SharedVpc/shared-public-subnetSubnet3"
+                          }
+                        ]
+                      }
+                    }
+                  },
+                  "NATGateway": {
+                    "id": "NATGateway",
+                    "path": "SharedVpcStack/SharedVpc/shared-public-subnetSubnet3/NATGateway",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::EC2::NatGateway",
+                      "aws:cdk:cloudformation:props": {
+                        "allocationId": {
+                          "Fn::GetAtt": [
+                            "SharedVpcsharedpublicsubnetSubnet3EIPB3DCC311",
+                            "AllocationId"
+                          ]
+                        },
+                        "subnetId": {
+                          "Ref": "SharedVpcsharedpublicsubnetSubnet3SubnetEFB04CC4"
+                        },
+                        "tags": [
+                          {
+                            "key": "Name",
+                            "value": "SharedVpcStack/SharedVpc/shared-public-subnetSubnet3"
+                          }
+                        ]
+                      }
+                    }
+                  }
+                }
+              },
+              "IGW": {
+                "id": "IGW",
+                "path": "SharedVpcStack/SharedVpc/IGW",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::EC2::InternetGateway",
+                  "aws:cdk:cloudformation:props": {
+                    "tags": [
+                      {
+                        "key": "Name",
+                        "value": "SharedVpcStack/SharedVpc"
+                      }
+                    ]
+                  }
+                }
+              },
+              "VPCGW": {
+                "id": "VPCGW",
+                "path": "SharedVpcStack/SharedVpc/VPCGW",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::EC2::VPCGatewayAttachment",
+                  "aws:cdk:cloudformation:props": {
+                    "vpcId": {
+                      "Ref": "SharedVpc96F0F614"
+                    },
+                    "internetGatewayId": {
+                      "Ref": "SharedVpcIGW869E5885"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "GatlingEcrStack": {
+        "id": "GatlingEcrStack",
+        "path": "GatlingEcrStack",
+        "children": {
+          "EcrRepositoryGatlingRunner": {
+            "id": "EcrRepositoryGatlingRunner",
+            "path": "GatlingEcrStack/EcrRepositoryGatlingRunner",
+            "children": {
+              "Resource": {
+                "id": "Resource",
+                "path": "GatlingEcrStack/EcrRepositoryGatlingRunner/Resource",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::ECR::Repository",
+                  "aws:cdk:cloudformation:props": {
+                    "lifecyclePolicy": {
+                      "lifecyclePolicyText": "{\"rules\":[{\"rulePriority\":1,\"description\":\"Only keep the last 5 images\",\"selection\":{\"tagStatus\":\"any\",\"countType\":\"imageCountMoreThan\",\"countNumber\":5},\"action\":{\"type\":\"expire\"}}]}"
+                    },
+                    "repositoryName": "gatling/gatling-runner",
+                    "repositoryPolicyText": {
+                      "Statement": [
+                        {
+                          "Action": [
+                            "ecr:GetDownloadUrlForLayer",
+                            "ecr:Batch*",
+                            "ecr:PutImage",
+                            "ecr:ListImages",
+                            "ecr:InitiateLayerUpload",
+                            "ecr:UploadLayerPart",
+                            "ecr:CompleteLayerUpload",
+                            "ecr:DescribeImages"
+                          ],
+                          "Effect": "Allow",
+                          "Principal": {
+                            "AWS": "arn:aws:iam::056319353359:root"
+                          },
+                          "Sid": "AllowAccessFromAccount"
+                        }
+                      ],
+                      "Version": "2012-10-17"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "EcrRepositoryGrafana": {
+            "id": "EcrRepositoryGrafana",
+            "path": "GatlingEcrStack/EcrRepositoryGrafana",
+            "children": {
+              "Resource": {
+                "id": "Resource",
+                "path": "GatlingEcrStack/EcrRepositoryGrafana/Resource",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::ECR::Repository",
+                  "aws:cdk:cloudformation:props": {
+                    "lifecyclePolicy": {
+                      "lifecyclePolicyText": "{\"rules\":[{\"rulePriority\":1,\"description\":\"Only keep the last 5 images\",\"selection\":{\"tagStatus\":\"any\",\"countType\":\"imageCountMoreThan\",\"countNumber\":5},\"action\":{\"type\":\"expire\"}}]}"
+                    },
+                    "repositoryName": "gatling/grafana",
+                    "repositoryPolicyText": {
+                      "Statement": [
+                        {
+                          "Action": [
+                            "ecr:GetDownloadUrlForLayer",
+                            "ecr:Batch*",
+                            "ecr:PutImage",
+                            "ecr:ListImages",
+                            "ecr:InitiateLayerUpload",
+                            "ecr:UploadLayerPart",
+                            "ecr:CompleteLayerUpload",
+                            "ecr:DescribeImages"
+                          ],
+                          "Effect": "Allow",
+                          "Principal": {
+                            "AWS": "arn:aws:iam::056319353359:root"
+                          },
+                          "Sid": "AllowAccessFromAccount"
+                        }
+                      ],
+                      "Version": "2012-10-17"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "EcrRepositoryInfluxDB": {
+            "id": "EcrRepositoryInfluxDB",
+            "path": "GatlingEcrStack/EcrRepositoryInfluxDB",
+            "children": {
+              "Resource": {
+                "id": "Resource",
+                "path": "GatlingEcrStack/EcrRepositoryInfluxDB/Resource",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::ECR::Repository",
+                  "aws:cdk:cloudformation:props": {
+                    "lifecyclePolicy": {
+                      "lifecyclePolicyText": "{\"rules\":[{\"rulePriority\":1,\"description\":\"Only keep the last 5 images\",\"selection\":{\"tagStatus\":\"any\",\"countType\":\"imageCountMoreThan\",\"countNumber\":5},\"action\":{\"type\":\"expire\"}}]}"
+                    },
+                    "repositoryName": "gatling/influxdb",
+                    "repositoryPolicyText": {
+                      "Statement": [
+                        {
+                          "Action": [
+                            "ecr:GetDownloadUrlForLayer",
+                            "ecr:Batch*",
+                            "ecr:PutImage",
+                            "ecr:ListImages",
+                            "ecr:InitiateLayerUpload",
+                            "ecr:UploadLayerPart",
+                            "ecr:CompleteLayerUpload",
+                            "ecr:DescribeImages"
+                          ],
+                          "Effect": "Allow",
+                          "Principal": {
+                            "AWS": "arn:aws:iam::056319353359:root"
+                          },
+                          "Sid": "AllowAccessFromAccount"
+                        }
+                      ],
+                      "Version": "2012-10-17"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "GatlingEcsFargateStack": {
+        "id": "GatlingEcsFargateStack",
+        "path": "GatlingEcsFargateStack",
+        "children": {
+          "sharedVpc": {
+            "id": "sharedVpc",
+            "path": "GatlingEcsFargateStack/sharedVpc",
+            "children": {
+              "shared-public-subnetSubnet1": {
+                "id": "shared-public-subnetSubnet1",
+                "path": "GatlingEcsFargateStack/sharedVpc/shared-public-subnetSubnet1"
+              },
+              "shared-public-subnetSubnet2": {
+                "id": "shared-public-subnetSubnet2",
+                "path": "GatlingEcsFargateStack/sharedVpc/shared-public-subnetSubnet2"
+              },
+              "shared-public-subnetSubnet3": {
+                "id": "shared-public-subnetSubnet3",
+                "path": "GatlingEcsFargateStack/sharedVpc/shared-public-subnetSubnet3"
+              },
+              "shared-private-subnetSubnet1": {
+                "id": "shared-private-subnetSubnet1",
+                "path": "GatlingEcsFargateStack/sharedVpc/shared-private-subnetSubnet1"
+              },
+              "shared-private-subnetSubnet2": {
+                "id": "shared-private-subnetSubnet2",
+                "path": "GatlingEcsFargateStack/sharedVpc/shared-private-subnetSubnet2"
+              },
+              "shared-private-subnetSubnet3": {
+                "id": "shared-private-subnetSubnet3",
+                "path": "GatlingEcsFargateStack/sharedVpc/shared-private-subnetSubnet3"
+              }
+            }
+          },
+          "GatlingRealtimeMonitoringLoadTest": {
+            "id": "GatlingRealtimeMonitoringLoadTest",
+            "path": "GatlingEcsFargateStack/GatlingRealtimeMonitoringLoadTest",
+            "children": {
+              "Resource": {
+                "id": "Resource",
+                "path": "GatlingEcsFargateStack/GatlingRealtimeMonitoringLoadTest/Resource",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::ECS::Cluster",
+                  "aws:cdk:cloudformation:props": {
+                    "clusterName": "gatling-realtime-monitoring"
+                  }
+                }
+              },
+              "DefaultServiceDiscoveryNamespace": {
+                "id": "DefaultServiceDiscoveryNamespace",
+                "path": "GatlingEcsFargateStack/GatlingRealtimeMonitoringLoadTest/DefaultServiceDiscoveryNamespace",
+                "children": {
+                  "Resource": {
+                    "id": "Resource",
+                    "path": "GatlingEcsFargateStack/GatlingRealtimeMonitoringLoadTest/DefaultServiceDiscoveryNamespace/Resource",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::ServiceDiscovery::PrivateDnsNamespace",
+                      "aws:cdk:cloudformation:props": {
+                        "name": "gatling-realtime-monitoring.com",
+                        "vpc": "vpc-0db78bbfa8dd03eb3"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "FargateEcsExecutionRole": {
+            "id": "FargateEcsExecutionRole",
+            "path": "GatlingEcsFargateStack/FargateEcsExecutionRole",
+            "children": {
+              "Resource": {
+                "id": "Resource",
+                "path": "GatlingEcsFargateStack/FargateEcsExecutionRole/Resource",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::IAM::Role",
+                  "aws:cdk:cloudformation:props": {
+                    "assumeRolePolicyDocument": {
+                      "Statement": [
+                        {
+                          "Action": "sts:AssumeRole",
+                          "Effect": "Allow",
+                          "Principal": {
+                            "Service": "ecs-tasks.amazonaws.com"
+                          }
+                        }
+                      ],
+                      "Version": "2012-10-17"
+                    },
+                    "managedPolicyArns": [
+                      {
+                        "Fn::Join": [
+                          "",
+                          [
+                            "arn:",
+                            {
+                              "Ref": "AWS::Partition"
+                            },
+                            ":iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy"
+                          ]
+                        ]
+                      }
+                    ],
+                    "roleName": "gatling-ecs-execution-role"
+                  }
+                }
+              },
+              "DefaultPolicy": {
+                "id": "DefaultPolicy",
+                "path": "GatlingEcsFargateStack/FargateEcsExecutionRole/DefaultPolicy",
+                "children": {
+                  "Resource": {
+                    "id": "Resource",
+                    "path": "GatlingEcsFargateStack/FargateEcsExecutionRole/DefaultPolicy/Resource",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::IAM::Policy",
+                      "aws:cdk:cloudformation:props": {
+                        "policyDocument": {
+                          "Statement": [
+                            {
+                              "Action": [
+                                "ecr:BatchCheckLayerAvailability",
+                                "ecr:GetDownloadUrlForLayer",
+                                "ecr:BatchGetImage"
+                              ],
+                              "Effect": "Allow",
+                              "Resource": "arn:aws:ecr:eu-west-1:056319353359:repository/gatling/grafana"
+                            },
+                            {
+                              "Action": "ecr:GetAuthorizationToken",
+                              "Effect": "Allow",
+                              "Resource": "*"
+                            },
+                            {
+                              "Action": [
+                                "logs:CreateLogStream",
+                                "logs:PutLogEvents"
+                              ],
+                              "Effect": "Allow",
+                              "Resource": {
+                                "Fn::GetAtt": [
+                                  "GrafanaInfluxFargateServiceGrafanaContainerOptionsgrafanaFargateLogGroup29CE72C9",
+                                  "Arn"
+                                ]
+                              }
+                            },
+                            {
+                              "Action": [
+                                "ecr:BatchCheckLayerAvailability",
+                                "ecr:GetDownloadUrlForLayer",
+                                "ecr:BatchGetImage"
+                              ],
+                              "Effect": "Allow",
+                              "Resource": "arn:aws:ecr:eu-west-1:056319353359:repository/gatling/influxdb"
+                            },
+                            {
+                              "Action": [
+                                "logs:CreateLogStream",
+                                "logs:PutLogEvents"
+                              ],
+                              "Effect": "Allow",
+                              "Resource": {
+                                "Fn::GetAtt": [
+                                  "GrafanaInfluxFargateServiceInfluxDBContainerOptionsinfluxdbFargateLogGroup0EFB9137",
+                                  "Arn"
+                                ]
+                              }
+                            },
+                            {
+                              "Action": [
+                                "ecr:BatchCheckLayerAvailability",
+                                "ecr:GetDownloadUrlForLayer",
+                                "ecr:BatchGetImage"
+                              ],
+                              "Effect": "Allow",
+                              "Resource": "arn:aws:ecr:eu-west-1:056319353359:repository/gatling/gatling-runner"
+                            },
+                            {
+                              "Action": [
+                                "logs:CreateLogStream",
+                                "logs:PutLogEvents"
+                              ],
+                              "Effect": "Allow",
+                              "Resource": {
+                                "Fn::GetAtt": [
+                                  "GatlingRunnerFargateServicegatlingRunnerFargateLogGroup7444D3EB",
+                                  "Arn"
+                                ]
+                              }
+                            }
+                          ],
+                          "Version": "2012-10-17"
+                        },
+                        "policyName": "FargateEcsExecutionRoleDefaultPolicy8A421BD7",
+                        "roles": [
+                          {
+                            "Ref": "FargateEcsExecutionRole3EAA7352"
+                          }
+                        ]
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "FargateEcsTaskRole": {
+            "id": "FargateEcsTaskRole",
+            "path": "GatlingEcsFargateStack/FargateEcsTaskRole",
+            "children": {
+              "Resource": {
+                "id": "Resource",
+                "path": "GatlingEcsFargateStack/FargateEcsTaskRole/Resource",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::IAM::Role",
+                  "aws:cdk:cloudformation:props": {
+                    "assumeRolePolicyDocument": {
+                      "Statement": [
+                        {
+                          "Action": "sts:AssumeRole",
+                          "Effect": "Allow",
+                          "Principal": {
+                            "Service": "ecs-tasks.amazonaws.com"
+                          }
+                        }
+                      ],
+                      "Version": "2012-10-17"
+                    },
+                    "policies": [
+                      {
+                        "policyName": "cloudwatch-logs",
+                        "policyDocument": {
+                          "Statement": [
+                            {
+                              "Action": "logs:*",
+                              "Effect": "Allow",
+                              "Resource": "*"
+                            }
+                          ],
+                          "Version": "2012-10-17"
+                        }
+                      }
+                    ],
+                    "roleName": "gatling-ecs-task-role"
+                  }
+                }
+              }
+            }
+          },
+          "GrafanaInfluxFargateService": {
+            "id": "GrafanaInfluxFargateService",
+            "path": "GatlingEcsFargateStack/GrafanaInfluxFargateService",
+            "children": {
+              "GrafanaInfluxSecurityGroup": {
+                "id": "GrafanaInfluxSecurityGroup",
+                "path": "GatlingEcsFargateStack/GrafanaInfluxFargateService/GrafanaInfluxSecurityGroup",
+                "children": {
+                  "Resource": {
+                    "id": "Resource",
+                    "path": "GatlingEcsFargateStack/GrafanaInfluxFargateService/GrafanaInfluxSecurityGroup/Resource",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::EC2::SecurityGroup",
+                      "aws:cdk:cloudformation:props": {
+                        "groupDescription": "gatling-monitoring security group",
+                        "securityGroupEgress": [
+                          {
+                            "cidrIp": "0.0.0.0/0",
+                            "description": "Allow all outbound traffic by default",
+                            "ipProtocol": "-1"
+                          }
+                        ],
+                        "securityGroupIngress": [
+                          {
+                            "cidrIp": "0.0.0.0/0",
+                            "ipProtocol": "tcp",
+                            "fromPort": 3000,
+                            "toPort": 3000,
+                            "description": "The default port that runs the Grafana UI."
+                          },
+                          {
+                            "cidrIp": "0.0.0.0/0",
+                            "ipProtocol": "tcp",
+                            "fromPort": 8086,
+                            "toPort": 8086,
+                            "description": "The default port that runs the InfluxDB HTTP service."
+                          },
+                          {
+                            "cidrIp": "0.0.0.0/0",
+                            "ipProtocol": "tcp",
+                            "fromPort": 2003,
+                            "toPort": 2003,
+                            "description": "The default port that runs the Graphite service."
+                          }
+                        ],
+                        "vpcId": "vpc-0db78bbfa8dd03eb3"
+                      }
+                    }
+                  }
+                }
+              },
+              "GrafanaInfluxTaskDefinition": {
+                "id": "GrafanaInfluxTaskDefinition",
+                "path": "GatlingEcsFargateStack/GrafanaInfluxFargateService/GrafanaInfluxTaskDefinition",
+                "children": {
+                  "Resource": {
+                    "id": "Resource",
+                    "path": "GatlingEcsFargateStack/GrafanaInfluxFargateService/GrafanaInfluxTaskDefinition/Resource",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::ECS::TaskDefinition",
+                      "aws:cdk:cloudformation:props": {
+                        "containerDefinitions": [
+                          {
+                            "essential": true,
+                            "image": {
+                              "Fn::Join": [
+                                "",
+                                [
+                                  "056319353359.dkr.ecr.eu-west-1.",
+                                  {
+                                    "Ref": "AWS::URLSuffix"
+                                  },
+                                  "/gatling/grafana:latest"
+                                ]
+                              ]
+                            },
+                            "name": "grafana",
+                            "logConfiguration": {
+                              "logDriver": "awslogs",
+                              "options": {
+                                "awslogs-group": {
+                                  "Ref": "GrafanaInfluxFargateServiceGrafanaContainerOptionsgrafanaFargateLogGroup29CE72C9"
+                                },
+                                "awslogs-stream-prefix": "grafana",
+                                "awslogs-region": "eu-west-1"
+                              }
+                            },
+                            "environment": [
+                              {
+                                "name": "INFLUXDB_HOST",
+                                "value": "localhost"
+                              },
+                              {
+                                "name": "INFLUXDB_ACCESS_MODE",
+                                "value": "proxy"
+                              },
+                              {
+                                "name": "INFLUXDB_PORT",
+                                "value": "8086"
+                              }
+                            ]
+                          },
+                          {
+                            "essential": true,
+                            "image": {
+                              "Fn::Join": [
+                                "",
+                                [
+                                  "056319353359.dkr.ecr.eu-west-1.",
+                                  {
+                                    "Ref": "AWS::URLSuffix"
+                                  },
+                                  "/gatling/influxdb:latest"
+                                ]
+                              ]
+                            },
+                            "name": "influxdb",
+                            "logConfiguration": {
+                              "logDriver": "awslogs",
+                              "options": {
+                                "awslogs-group": {
+                                  "Ref": "GrafanaInfluxFargateServiceInfluxDBContainerOptionsinfluxdbFargateLogGroup0EFB9137"
+                                },
+                                "awslogs-stream-prefix": "influxdb",
+                                "awslogs-region": "eu-west-1"
+                              }
+                            }
+                          }
+                        ],
+                        "cpu": "256",
+                        "executionRoleArn": {
+                          "Fn::GetAtt": [
+                            "FargateEcsExecutionRole3EAA7352",
+                            "Arn"
+                          ]
+                        },
+                        "family": "GatlingEcsFargateStackGrafanaInfluxFargateServiceGrafanaInfluxTaskDefinition0A068B64",
+                        "memory": "512",
+                        "networkMode": "awsvpc",
+                        "requiresCompatibilities": [
+                          "FARGATE"
+                        ],
+                        "taskRoleArn": {
+                          "Fn::GetAtt": [
+                            "FargateEcsTaskRoleC1B293E1",
+                            "Arn"
+                          ]
+                        }
+                      }
+                    }
+                  },
+                  "grafana": {
+                    "id": "grafana",
+                    "path": "GatlingEcsFargateStack/GrafanaInfluxFargateService/GrafanaInfluxTaskDefinition/grafana"
+                  },
+                  "influxdb": {
+                    "id": "influxdb",
+                    "path": "GatlingEcsFargateStack/GrafanaInfluxFargateService/GrafanaInfluxTaskDefinition/influxdb"
+                  }
+                }
+              },
+              "GrafanaContainerOptions": {
+                "id": "GrafanaContainerOptions",
+                "path": "GatlingEcsFargateStack/GrafanaInfluxFargateService/GrafanaContainerOptions",
+                "children": {
+                  "GatlingGrafanaRepository": {
+                    "id": "GatlingGrafanaRepository",
+                    "path": "GatlingEcsFargateStack/GrafanaInfluxFargateService/GrafanaContainerOptions/GatlingGrafanaRepository"
+                  },
+                  "grafanaFargateLogGroup": {
+                    "id": "grafanaFargateLogGroup",
+                    "path": "GatlingEcsFargateStack/GrafanaInfluxFargateService/GrafanaContainerOptions/grafanaFargateLogGroup",
+                    "children": {
+                      "Resource": {
+                        "id": "Resource",
+                        "path": "GatlingEcsFargateStack/GrafanaInfluxFargateService/GrafanaContainerOptions/grafanaFargateLogGroup/Resource",
+                        "attributes": {
+                          "aws:cdk:cloudformation:type": "AWS::Logs::LogGroup",
+                          "aws:cdk:cloudformation:props": {
+                            "logGroupName": "/ecs/gatling/grafana",
+                            "retentionInDays": 14
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "InfluxDBContainerOptions": {
+                "id": "InfluxDBContainerOptions",
+                "path": "GatlingEcsFargateStack/GrafanaInfluxFargateService/InfluxDBContainerOptions",
+                "children": {
+                  "GatlingInfluxDBRepository": {
+                    "id": "GatlingInfluxDBRepository",
+                    "path": "GatlingEcsFargateStack/GrafanaInfluxFargateService/InfluxDBContainerOptions/GatlingInfluxDBRepository"
+                  },
+                  "influxdbFargateLogGroup": {
+                    "id": "influxdbFargateLogGroup",
+                    "path": "GatlingEcsFargateStack/GrafanaInfluxFargateService/InfluxDBContainerOptions/influxdbFargateLogGroup",
+                    "children": {
+                      "Resource": {
+                        "id": "Resource",
+                        "path": "GatlingEcsFargateStack/GrafanaInfluxFargateService/InfluxDBContainerOptions/influxdbFargateLogGroup/Resource",
+                        "attributes": {
+                          "aws:cdk:cloudformation:type": "AWS::Logs::LogGroup",
+                          "aws:cdk:cloudformation:props": {
+                            "logGroupName": "/ecs/gatling/influxdb",
+                            "retentionInDays": 14
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "GrafanaInfluxFargateService": {
+                "id": "GrafanaInfluxFargateService",
+                "path": "GatlingEcsFargateStack/GrafanaInfluxFargateService/GrafanaInfluxFargateService",
+                "children": {
+                  "Service": {
+                    "id": "Service",
+                    "path": "GatlingEcsFargateStack/GrafanaInfluxFargateService/GrafanaInfluxFargateService/Service",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::ECS::Service",
+                      "aws:cdk:cloudformation:props": {
+                        "cluster": {
+                          "Ref": "GatlingRealtimeMonitoringLoadTestFA5622D2"
+                        },
+                        "deploymentConfiguration": {
+                          "maximumPercent": 200,
+                          "minimumHealthyPercent": 50
+                        },
+                        "desiredCount": 0,
+                        "enableEcsManagedTags": false,
+                        "launchType": "FARGATE",
+                        "networkConfiguration": {
+                          "awsvpcConfiguration": {
+                            "assignPublicIp": "ENABLED",
+                            "subnets": [
+                              "subnet-08dd6953a515dad85",
+                              "subnet-0c73e682f3b278684",
+                              "subnet-016b933bbdf24cc48"
+                            ],
+                            "securityGroups": [
+                              {
+                                "Fn::GetAtt": [
+                                  "GrafanaInfluxFargateServiceGrafanaInfluxSecurityGroup4D6AE120",
+                                  "GroupId"
+                                ]
+                              }
+                            ]
+                          }
+                        },
+                        "serviceName": "gatling-monitoring",
+                        "serviceRegistries": [
+                          {
+                            "registryArn": {
+                              "Fn::GetAtt": [
+                                "GrafanaInfluxFargateServiceCloudmapService9DA0A97B",
+                                "Arn"
+                              ]
+                            }
+                          }
+                        ],
+                        "taskDefinition": {
+                          "Ref": "GrafanaInfluxFargateServiceGrafanaInfluxTaskDefinitionB835A9D5"
+                        }
+                      }
+                    }
+                  },
+                  "CloudmapService": {
+                    "id": "CloudmapService",
+                    "path": "GatlingEcsFargateStack/GrafanaInfluxFargateService/GrafanaInfluxFargateService/CloudmapService",
+                    "children": {
+                      "Resource": {
+                        "id": "Resource",
+                        "path": "GatlingEcsFargateStack/GrafanaInfluxFargateService/GrafanaInfluxFargateService/CloudmapService/Resource",
+                        "attributes": {
+                          "aws:cdk:cloudformation:type": "AWS::ServiceDiscovery::Service",
+                          "aws:cdk:cloudformation:props": {
+                            "dnsConfig": {
+                              "dnsRecords": [
+                                {
+                                  "type": "A",
+                                  "ttl": 60
+                                }
+                              ],
+                              "namespaceId": {
+                                "Fn::GetAtt": [
+                                  "GatlingRealtimeMonitoringLoadTestDefaultServiceDiscoveryNamespaceFFA03AEA",
+                                  "Id"
+                                ]
+                              },
+                              "routingPolicy": "MULTIVALUE"
+                            },
+                            "healthCheckCustomConfig": {
+                              "failureThreshold": 1
+                            },
+                            "name": "gatling-monitoring",
+                            "namespaceId": {
+                              "Fn::GetAtt": [
+                                "GatlingRealtimeMonitoringLoadTestDefaultServiceDiscoveryNamespaceFFA03AEA",
+                                "Id"
+                              ]
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "GatlingRunnerFargateService": {
+            "id": "GatlingRunnerFargateService",
+            "path": "GatlingEcsFargateStack/GatlingRunnerFargateService",
+            "children": {
+              "GatlingRunnerSecurityGroup": {
+                "id": "GatlingRunnerSecurityGroup",
+                "path": "GatlingEcsFargateStack/GatlingRunnerFargateService/GatlingRunnerSecurityGroup",
+                "children": {
+                  "Resource": {
+                    "id": "Resource",
+                    "path": "GatlingEcsFargateStack/GatlingRunnerFargateService/GatlingRunnerSecurityGroup/Resource",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::EC2::SecurityGroup",
+                      "aws:cdk:cloudformation:props": {
+                        "groupDescription": "gatling-runner security group",
+                        "securityGroupEgress": [
+                          {
+                            "cidrIp": "0.0.0.0/0",
+                            "description": "Allow all outbound traffic by default",
+                            "ipProtocol": "-1"
+                          }
+                        ],
+                        "vpcId": "vpc-0db78bbfa8dd03eb3"
+                      }
+                    }
+                  }
+                }
+              },
+              "GatlingRunnerFargateTaskDefinition": {
+                "id": "GatlingRunnerFargateTaskDefinition",
+                "path": "GatlingEcsFargateStack/GatlingRunnerFargateService/GatlingRunnerFargateTaskDefinition",
+                "children": {
+                  "Resource": {
+                    "id": "Resource",
+                    "path": "GatlingEcsFargateStack/GatlingRunnerFargateService/GatlingRunnerFargateTaskDefinition/Resource",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::ECS::TaskDefinition",
+                      "aws:cdk:cloudformation:props": {
+                        "containerDefinitions": [
+                          {
+                            "command": [
+                              "-gh",
+                              "gatling-monitoring.gatling-realtime-monitoring.com"
+                            ],
+                            "essential": true,
+                            "image": {
+                              "Fn::Join": [
+                                "",
+                                [
+                                  "056319353359.dkr.ecr.eu-west-1.",
+                                  {
+                                    "Ref": "AWS::URLSuffix"
+                                  },
+                                  "/gatling/gatling-runner:latest"
+                                ]
+                              ]
+                            },
+                            "name": "gatlingRunnerContainer",
+                            "logConfiguration": {
+                              "logDriver": "awslogs",
+                              "options": {
+                                "awslogs-group": {
+                                  "Ref": "GatlingRunnerFargateServicegatlingRunnerFargateLogGroup7444D3EB"
+                                },
+                                "awslogs-stream-prefix": "gatling-runner",
+                                "awslogs-region": "eu-west-1"
+                              }
+                            }
+                          }
+                        ],
+                        "cpu": "1024",
+                        "executionRoleArn": {
+                          "Fn::GetAtt": [
+                            "FargateEcsExecutionRole3EAA7352",
+                            "Arn"
+                          ]
+                        },
+                        "family": "GatlingEcsFargateStackGatlingRunnerFargateServiceGatlingRunnerFargateTaskDefinition9B4279D9",
+                        "memory": "2048",
+                        "networkMode": "awsvpc",
+                        "requiresCompatibilities": [
+                          "FARGATE"
+                        ],
+                        "taskRoleArn": {
+                          "Fn::GetAtt": [
+                            "FargateEcsTaskRoleC1B293E1",
+                            "Arn"
+                          ]
+                        }
+                      }
+                    }
+                  },
+                  "gatlingRunnerContainer": {
+                    "id": "gatlingRunnerContainer",
+                    "path": "GatlingEcsFargateStack/GatlingRunnerFargateService/GatlingRunnerFargateTaskDefinition/gatlingRunnerContainer"
+                  }
+                }
+              },
+              "GatlingRunnerRepository": {
+                "id": "GatlingRunnerRepository",
+                "path": "GatlingEcsFargateStack/GatlingRunnerFargateService/GatlingRunnerRepository"
+              },
+              "gatlingRunnerFargateLogGroup": {
+                "id": "gatlingRunnerFargateLogGroup",
+                "path": "GatlingEcsFargateStack/GatlingRunnerFargateService/gatlingRunnerFargateLogGroup",
+                "children": {
+                  "Resource": {
+                    "id": "Resource",
+                    "path": "GatlingEcsFargateStack/GatlingRunnerFargateService/gatlingRunnerFargateLogGroup/Resource",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::Logs::LogGroup",
+                      "aws:cdk:cloudformation:props": {
+                        "logGroupName": "/ecs/gatling/gatling-runner",
+                        "retentionInDays": 14
+                      }
+                    }
+                  }
+                }
+              },
+              "GatlingRunnerFargateService": {
+                "id": "GatlingRunnerFargateService",
+                "path": "GatlingEcsFargateStack/GatlingRunnerFargateService/GatlingRunnerFargateService",
+                "children": {
+                  "Service": {
+                    "id": "Service",
+                    "path": "GatlingEcsFargateStack/GatlingRunnerFargateService/GatlingRunnerFargateService/Service",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::ECS::Service",
+                      "aws:cdk:cloudformation:props": {
+                        "cluster": {
+                          "Ref": "GatlingRealtimeMonitoringLoadTestFA5622D2"
+                        },
+                        "deploymentConfiguration": {
+                          "maximumPercent": 200,
+                          "minimumHealthyPercent": 50
+                        },
+                        "desiredCount": 0,
+                        "enableEcsManagedTags": false,
+                        "launchType": "FARGATE",
+                        "networkConfiguration": {
+                          "awsvpcConfiguration": {
+                            "assignPublicIp": "DISABLED",
+                            "subnets": [
+                              "subnet-024bae83ed65cfe4c",
+                              "subnet-0732e2b6fc7c08abb",
+                              "subnet-04ed7b92a2231b24d"
+                            ],
+                            "securityGroups": [
+                              {
+                                "Fn::GetAtt": [
+                                  "GatlingRunnerFargateServiceGatlingRunnerSecurityGroupACBF1111",
+                                  "GroupId"
+                                ]
+                              }
+                            ]
+                          }
+                        },
+                        "serviceName": "gatling-runner",
+                        "taskDefinition": {
+                          "Ref": "GatlingRunnerFargateServiceGatlingRunnerFargateTaskDefinition24BE91E6"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

@@ -25,6 +25,7 @@ public class SharedVpcStack extends Stack {
 
         Vpc vpc = Vpc.Builder.create(this, "SharedVpc")
                 .cidr("10.12.0.0/16")
+                .maxAzs(2)
                 .subnetConfiguration(Arrays.asList(privateSubnet, publicSubnet))
                 .build();
 
