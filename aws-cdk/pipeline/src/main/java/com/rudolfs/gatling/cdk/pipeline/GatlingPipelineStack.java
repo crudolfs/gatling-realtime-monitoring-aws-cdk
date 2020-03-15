@@ -26,7 +26,7 @@ public class GatlingPipelineStack extends Stack {
         super(scope, id, props);
 
         PipelineProject cdkBuild = PipelineProject.Builder.create(this, "CDKBuild")
-                .buildSpec(BuildSpec.fromSourceFilename("aws-cdk/buildspec.yml"))
+                .buildSpec(BuildSpec.fromSourceFilename("aws-cdk/infra/buildspec.yml"))
                 .environment(BuildEnvironment.builder()
                         .buildImage(LinuxBuildImage.STANDARD_2_0).build())
                 .build();
