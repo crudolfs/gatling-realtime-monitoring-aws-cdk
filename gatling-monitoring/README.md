@@ -33,6 +33,8 @@ A Gatling test run can be started as follows:
 The --network parameter is required to communicate with InfluxDB which is started via [docker-compose](./docker-compose.yml).
 The -gh and -gp options indicate the GATLING_GRAPHITE_HOST and GATLING_GRAPHITE_PORT respectively which is needed to communicate with InfluxDB.
 
+#TODO
+https://aws.amazon.com/blogs/devops/build-a-continuous-delivery-pipeline-for-your-container-images-with-amazon-ecr-as-source/
 
 ### AWS ECS Fargate
 The AWS infrastructure that is needed to run the Gatling solution in the AWS cloud is available in code in the [aws-cdk](../aws-cdk) folder.

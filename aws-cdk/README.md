@@ -1,4 +1,41 @@
 # AWS CDK project for Gatling realtime monitoring on AWS ECS
-This folder contains two Maven AWS CDK projects:
-- [infra](./infra): contains code for the core infrastructure
-- [pipeline](./pipeline): contains code for the CI/CD pipeline
+This module contains the [AWS CDK](https://docs.aws.amazon.com/cdk/latest/guide/home.html) code for 3 stacks:
+1. GatlingVpcStack: contains a VPC with a private and public subnet (redundant in two availability zones)
+2. GatlingEcrStack: contains three ECR repositories (gatling-runner, grafana and influxdb)
+3. GatlingEcsFargateStack: contains an ECS cluster with two services (one for the gatling-runner and one for the monitoring part with grafana and influxdb)
+
+It is a [Maven](https://maven.apache.org/) based project, so you can open this project with any Maven compatible Java IDE to build and run tests.
+
+## Useful commands
+ * `mvn package` compile and run tests
+ * `cdk ls --profile <profile-name>` list all stacks in the app
+ * `cdk synth GatlingVpcStack --profile <profile-name>` emits the synthesized CloudFormation template for the GatlingVpcStack
+ * `cdk synth GatlingEcrStack --profile <profile-name>` emits the synthesized CloudFormation template for the GatlingEcrStack
+ * `cdk synth GatlingEcsFargateStack --profile <profile-name>` emits the synthesized CloudFormation template for the GatlingEcsFargateStack
+ * `cdk synth GatlingPipelineStack --profile <profile-name>` emits the synthesized CloudFormation template for the GatlingPipelineStack
+ * `cdk deploy GatlingVpcStack --profile <profile-name>` deploy the GatlingVpcStack to the AWS account/region as specified by the provided profile
+ * `cdk deploy GatlingEcrStack --profile <profile-name>` deploy the GatlingEcrStack to the AWS account/region as specified by the provided profile
+ * `cdk deploy GatlingEcsFargateStack --profile <profile-name>` deploy the GatlingEcsFargateStack to the AWS account/region as specified by the provided profile
+ * `cdk deploy GatlingPipelineStack --profile <profile-name>` deploy the GatlingPipelineStack to the AWS account/region as specified by the provided profile
+ * `cdk diff` compare deployed stack with current state
+ * `cdk docs` open CDK documentation
+ 
+ ## Deploy instructions
+ The stack should be deployed in the following order:
+ 1. GatlingVpcStack (optional)
+ 2. GatlingEcrStack
+ 3. GatlingEcsFargateStack
+ 4. GatlingPipelineStack (optional)
+ 
+ Use the --profile option to make sure that the stack is deployed to the correct AWS account/region.
+ 
+ ```
+cdk deploy GatlingVpcStack --profile <profile-name>
+cdk deploy GatlingEcrStack --profile <profile-name>
+cdk deploy GatlingEcsFargateStack --profile <profile-name>
+```
+The deployment of these stacks is automated in a CodePipeline stack 
+(see [GatlingPipelineStack](../aws-cdk/src/main/java/com/rudolfs/gatling/cdk/pipeline/GatlingPipelineStack.java)) which can be deployed with 
+the following command:
+
+`cdk deploy GatlingEcsPipelineStack --profile <profile-name>`.
