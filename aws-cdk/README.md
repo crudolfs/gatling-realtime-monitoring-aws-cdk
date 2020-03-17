@@ -4,7 +4,7 @@ This module contains the [AWS CDK](https://docs.aws.amazon.com/cdk/latest/guide/
 2. GatlingEcrStack: contains three ECR repositories (gatling-runner, grafana and influxdb)
 3. GatlingEcsFargateStack: contains an ECS cluster with two services (one for the gatling-runner and one for the monitoring part with grafana and influxdb)
 
-It is a [Maven](https://maven.apache.org/) based project, so you can open this project with any Maven compatible Java IDE to build and run tests.
+This is a [Maven](https://maven.apache.org/) based project, so you can open this project with any Maven compatible Java IDE to build and run tests.
 
 ## Useful commands
  * `mvn package` compile and run tests
@@ -35,7 +35,7 @@ cdk deploy GatlingEcrStack --profile <profile-name>
 cdk deploy GatlingEcsFargateStack --profile <profile-name>
 ```
 The deployment of these stacks is automated in a CodePipeline stack 
-(see [GatlingPipelineStack](../aws-cdk/src/main/java/com/rudolfs/gatling/cdk/pipeline/GatlingPipelineStack.java)) which can be deployed with 
-the following command:
+(see [GatlingPipelineStack](../aws-cdk/src/main/java/com/rudolfs/gatling/cdk/pipeline/GatlingPipelineStack.java)).
+The CodePipeline itself is also written in infrastructure code and can be deployed with the following command:
 
-`cdk deploy GatlingEcsPipelineStack --profile <profile-name>`.
+`cdk deploy GatlingPipelineStack --profile <profile-name>`.
