@@ -82,4 +82,5 @@ aws ecs update-service --cluster gatling-cluster --service dashboard --desired-c
 When both services are up and running, you can see the realtime performance test results in the Grafana dashboard.
 The Grafana dashboard is accessible in a browser at http://<public-ip>:3000 (default login: admin/admin).
 The public IP address of Grafana can be found in the AWS Console by opening the Network section of the running 
-ECS Task within the dashboard ECS Service.  
+ECS Task within the dashboard ECS Service. Of course, using a load balancer with a proper DNS would have been more 
+appropriate, but is not currently part of the infra....  
