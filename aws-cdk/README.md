@@ -4,7 +4,31 @@ This module contains the [AWS CDK](https://docs.aws.amazon.com/cdk/latest/guide/
 2. GatlingEcrStack: contains three ECR repositories (gatling-runner, grafana and influxdb)
 3. GatlingEcsFargateStack: contains an ECS cluster with two services (one for the gatling-runner and one for the monitoring part with grafana and influxdb)
 
+## AWS CDK installation
+The AWS CDK command line tool (cdk) and the AWS Construct Library are developed in TypeScript and run on Node.js.
+Therefore you must have Node.js version >= 10.3.0 installed. Then install the AWS CDK by running the following command:
+
+`npm install -g aws-cdk`
+
+Then verify your installation:
+
+`cdk --version`
+
+### Prerequisites
 This is a [Maven](https://maven.apache.org/) based project, so you can open this project with any Maven compatible Java IDE to build and run tests.
+Make sure the following is in place for Java:
+
+- Maven 3.5.4 or higher
+- Java 8 (<<TODO: check if AWS CDK runs with Java 11+>>)
+- Specify AWS credentials and region
+
+and in general:
+
+- [Specify AWS credentials and region](https://docs.aws.amazon.com/cdk/latest/guide/getting_started.html#getting_started_credentials)
+
+The configuration of AWS credentials and region are very important, it's key to make the infrastructure deployment work correctly.
+
+**Note**: the aws-mfa tool may help when MFA is enforced on your AWS account: https://github.com/broamski/aws-mfa
 
 ## Useful commands
  * `mvn package` compile and run tests

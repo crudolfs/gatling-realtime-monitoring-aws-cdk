@@ -12,7 +12,7 @@ import software.amazon.awscdk.core.StackProps;
 import java.util.Objects;
 
 /**
- * AWS CDK app that creates the stack for a Gatling Realtime Monitoring app.
+ * AWS CDK app that contains the stacks for a Gatling Realtime Monitoring app.
  */
 public class GatlingRealtimeMonitoringCdkApp {
     private static final String DEFAULT_PROJECT_NAME = "gatling";
@@ -37,9 +37,7 @@ public class GatlingRealtimeMonitoringCdkApp {
                         .build())
                 .build();
 
-        GatlingVpcStack.builder().scope(app).id(vpcStackName).stackProps(stackProps)
-                .vpcName(vpcName)
-                .build();
+        new GatlingVpcStack(app, vpcStackName, stackProps, vpcName);
 
         final GatlingEcrProps gatlingEcrProps = GatlingEcrProps.builder()
                 .repositoryNamespace(projectName)

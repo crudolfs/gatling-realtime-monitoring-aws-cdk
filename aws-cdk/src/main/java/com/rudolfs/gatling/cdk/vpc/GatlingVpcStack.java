@@ -1,7 +1,8 @@
 package com.rudolfs.gatling.cdk.vpc;
 
-import com.rudolfs.gatling.cdk.StackBuilder;
+import software.amazon.awscdk.core.Construct;
 import software.amazon.awscdk.core.Stack;
+import software.amazon.awscdk.core.StackProps;
 import software.amazon.awscdk.core.Tag;
 import software.amazon.awscdk.core.TagProps;
 import software.amazon.awscdk.services.ec2.SubnetConfiguration;
@@ -17,19 +18,19 @@ import static java.util.Collections.singletonList;
  */
 public class GatlingVpcStack extends Stack {
 
-    private GatlingVpcStack(Builder builder) {
-        super(builder.getScope(), builder.getId(), builder.getStackProps());
+    public GatlingVpcStack(Construct scope, String id, StackProps stackProps, String vpcName) {
+        super(scope, id, stackProps);
 
-        SubnetConfiguration privateSubnet = subnet("gatling-private-subnet", 19, SubnetType.PRIVATE);
-        SubnetConfiguration publicSubnet = subnet("gatling-public-subnet", 20, SubnetType.PUBLIC);
+        final SubnetConfiguration privateSubnet = subnet("gatling-private-subnet", 19, SubnetType.PRIVATE);
+        final SubnetConfiguration publicSubnet = subnet("gatling-public-subnet", 20, SubnetType.PUBLIC);
 
-        Vpc vpc = Vpc.Builder.create(this, "GatlingVpc")
+        final Vpc vpc = Vpc.Builder.create(this, "GatlingVpc")
                 .cidr("10.12.0.0/16")
                 .maxAzs(2)
                 .subnetConfiguration(Arrays.asList(privateSubnet, publicSubnet))
                 .build();
 
-        Tag.add(vpc, "Name", builder.vpcName, TagProps.builder()
+        Tag.add(vpc, "Name", vpcName, TagProps.builder()
                 .includeResourceTypes(singletonList("AWS::EC2::VPC"))
                 .build());
     }
@@ -40,28 +41,5 @@ public class GatlingVpcStack extends Stack {
                 .name(name)
                 .subnetType(subnetType)
                 .build();
-    }
-
-    public static Builder builder() {
-        return new Builder();
-    }
-
-    public static final class Builder extends StackBuilder<Builder> {
-        private String vpcName;
-
-        public Builder vpcName(String vpcName) {
-            this.vpcName = vpcName;
-            return this;
-        }
-
-        @Override
-        public Stack build() {
-            return new GatlingVpcStack(this);
-        }
-
-        @Override
-        protected Builder self() {
-            return this;
-        }
     }
 }
