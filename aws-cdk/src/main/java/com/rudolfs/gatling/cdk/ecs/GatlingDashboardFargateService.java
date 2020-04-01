@@ -72,7 +72,7 @@ public class GatlingDashboardFargateService extends Construct {
     static class GrafanaContainerOptions extends Construct {
         private final ContainerDefinitionOptions containerDefinitionOptions;
 
-        public GrafanaContainerOptions(Construct scope, String id, Builder builder) {
+        public GrafanaContainerOptions(Construct scope, String id, GatlingDashboardFargateService.Builder builder) {
             super(scope, id);
 
             Map<String, String> environmentVariables = new HashMap<>();
@@ -110,7 +110,7 @@ public class GatlingDashboardFargateService extends Construct {
     static class InfluxContainerOptions extends Construct {
         private final ContainerDefinitionOptions containerDefinitionOptions;
 
-        public InfluxContainerOptions(Construct scope, String id, Builder builder) {
+        public InfluxContainerOptions(Construct scope, String id, GatlingDashboardFargateService.Builder builder) {
             super(scope, id);
 
             final GatlingEcrProps gatlingEcrProps = builder.serviceProps.getGatlingEcrProps();
