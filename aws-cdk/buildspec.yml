@@ -20,9 +20,9 @@ phases:
   build:
     commands:
       - echo "build started on `date`"
-      - cdk synth GatlingVpcStack --o dist
-      - cdk synth GatlingEcrStack --o dist
-      - cdk synth GatlingEcsFargateStack --o dist
+      - cdk synth gatlingVpcStack --o dist
+      - cdk synth gatlingEcrStack --o dist
+      - cdk synth gatlingEcsFargateStack --o dist
 
   post_build:
     commands:
@@ -30,8 +30,8 @@ phases:
 
 artifacts:
   files:
-    - 'GatlingVpcStack.template.json'
-    - 'GatlingEcrStack.template.json'
-    - 'GatlingEcsFargateStack.template.json'
+    - 'gatlingVpcStack.template.json'
+    - 'gatlingEcrStack.template.json'
+    - 'gatlingEcsFargateStack.template.json'
   base-directory: aws-cdk/dist
 
