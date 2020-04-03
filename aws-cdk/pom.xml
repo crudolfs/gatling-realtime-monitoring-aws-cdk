@@ -8,7 +8,7 @@
     <version>0.1</version>
 
     <properties>
-        <maven.compiler.release>14</maven.compiler.release>
+        <maven.compiler.release>11</maven.compiler.release>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
         <!-- Maven plugin versions -->
