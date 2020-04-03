@@ -1,6 +1,7 @@
 package com.rudolfs.gatling.cdk.ecs;
 
 import software.amazon.awscdk.core.Construct;
+import software.amazon.awscdk.core.RemovalPolicy;
 import software.amazon.awscdk.services.ec2.SecurityGroup;
 import software.amazon.awscdk.services.ec2.SecurityGroupProps;
 import software.amazon.awscdk.services.ec2.SubnetSelection;
@@ -53,6 +54,7 @@ public class GatlingRunnerFargateService extends Construct {
                         .logGroup(LogGroup.Builder.create(this, "gatlingRunnerFargateLogGroup")
                                 .logGroupName(logGroupName)
                                 .retention(RetentionDays.TWO_WEEKS)
+                                .removalPolicy(RemovalPolicy.DESTROY)
                                 .build())
                         .streamPrefix(serviceProps.getServiceName())
                         .build()))

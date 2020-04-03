@@ -1,6 +1,7 @@
 package com.rudolfs.gatling.cdk.ecs;
 
 import software.amazon.awscdk.core.Construct;
+import software.amazon.awscdk.core.RemovalPolicy;
 import software.amazon.awscdk.services.ec2.Peer;
 import software.amazon.awscdk.services.ec2.Port;
 import software.amazon.awscdk.services.ec2.SecurityGroup;
@@ -95,6 +96,7 @@ public class GatlingDashboardFargateService extends Construct {
                             .logGroup(LogGroup.Builder.create(this, "grafanaFargateLogGroup")
                                     .logGroupName(String.format("/ecs/%s", gatlingEcrProps.getRepositoryNameWithNamespace(gatlingEcrProps.getGrafanaRepositoryName())))
                                     .retention(RetentionDays.TWO_WEEKS)
+                                    .removalPolicy(RemovalPolicy.DESTROY)
                                     .build())
                             .streamPrefix(gatlingEcrProps.getGrafanaRepositoryName())
                             .build()))
@@ -128,6 +130,7 @@ public class GatlingDashboardFargateService extends Construct {
                             .logGroup(LogGroup.Builder.create(this, "influxdbFargateLogGroup")
                                     .logGroupName(String.format("/ecs/%s", gatlingEcrProps.getRepositoryNameWithNamespace(gatlingEcrProps.getInfluxDBRepositoryName())))
                                     .retention(RetentionDays.TWO_WEEKS)
+                                    .removalPolicy(RemovalPolicy.DESTROY)
                                     .build())
                             .streamPrefix(gatlingEcrProps.getInfluxDBRepositoryName())
                             .build()))

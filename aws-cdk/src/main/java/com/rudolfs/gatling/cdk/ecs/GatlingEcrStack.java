@@ -1,6 +1,7 @@
 package com.rudolfs.gatling.cdk.ecs;
 
 import software.amazon.awscdk.core.Construct;
+import software.amazon.awscdk.core.RemovalPolicy;
 import software.amazon.awscdk.core.Stack;
 import software.amazon.awscdk.core.StackProps;
 import software.amazon.awscdk.services.ecr.LifecycleRule;
@@ -25,10 +26,12 @@ public class GatlingEcrStack extends Stack {
 
         this.accountId = stackProps.getEnv().getAccount();
 
+        final int maxImageCount = 5;
+
         LifecycleRule lifecycleRule = LifecycleRule.builder()
                 .rulePriority(1)
-                .description("Only keep the last 5 images")
-                .maxImageCount(5)
+                .description(String.format("Only keep the last %d images", maxImageCount))
+                .maxImageCount(maxImageCount)
                 .tagStatus(TagStatus.ANY)
                 .build();
 
@@ -43,6 +46,7 @@ public class GatlingEcrStack extends Stack {
         Repository ecrRepository = Repository.Builder.create(this, id)
                 .repositoryName(repositoryName)
                 .lifecycleRules(lifecycleRules)
+                .removalPolicy(RemovalPolicy.DESTROY)
                 .build();
 
         PolicyStatement policyStatement = PolicyStatement.Builder.create()
