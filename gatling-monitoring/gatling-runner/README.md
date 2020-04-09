@@ -12,7 +12,8 @@ A Gatling test run can be started as follows:
 
 ```
 docker run --rm --name gatling-runner \
---network gatling-monitoring_gatling gatling-runner \
+--network gatling-monitoring_gatling \
+gatling-runner \
 -gh gatling-monitoring_influxdb_1 -gp 2003
 ```
 

@@ -16,7 +16,6 @@ import software.amazon.awscdk.services.codepipeline.actions.GitHubSourceAction;
 
 import java.util.List;
 
-import static java.util.Arrays.asList;
 import static java.util.Collections.singletonList;
 
 public class GatlingPipelineStack extends Stack {
@@ -58,19 +57,12 @@ public class GatlingPipelineStack extends Stack {
 
         StageProps deployStageProps = StageProps.builder()
                 .stageName("Deploy")
-                .actions(asList(CloudFormationCreateUpdateStackAction.Builder.create()
+                .actions(List.of(CloudFormationCreateUpdateStackAction.Builder.create()
                                 .actionName("VpcStackUpdate")
                                 .adminPermissions(true)
                                 .runOrder(1)
                                 .stackName(builder.vpcStackName)
                                 .templatePath(cdkBuildOutput.atPath(builder.vpcStackName + ".template.json"))
-                                .build(),
-                        CloudFormationCreateUpdateStackAction.Builder.create()
-                                .actionName("EcrStackUpdate")
-                                .adminPermissions(true)
-                                .runOrder(2)
-                                .stackName(builder.ecrStackName)
-                                .templatePath(cdkBuildOutput.atPath(builder.ecrStackName + ".template.json"))
                                 .build(),
                         CloudFormationCreateUpdateStackAction.Builder.create()
                                 .actionName("EcsFargateStackUpdate")
@@ -81,7 +73,7 @@ public class GatlingPipelineStack extends Stack {
                                 .build()))
                 .build();
 
-        List<StageProps> stages = asList(sourceStageProps, buildStageProps, deployStageProps);
+        List<StageProps> stages = List.of(sourceStageProps, buildStageProps, deployStageProps);
 
         Pipeline.Builder.create(this, "GatlingCICDPipeline")
                 .pipelineName(builder.pipelineName)
@@ -96,7 +88,6 @@ public class GatlingPipelineStack extends Stack {
     public static final class Builder extends StackBuilder<Builder> {
         private String pipelineName;
         private String vpcStackName;
-        private String ecrStackName;
         private String ecsFargateStackName;
 
         public Builder pipelineName(String pipelineName) {
@@ -106,11 +97,6 @@ public class GatlingPipelineStack extends Stack {
 
         public Builder vpcStackName(String vpcStackName) {
             this.vpcStackName = vpcStackName;
-            return this;
-        }
-
-        public Builder ecrStackName(String ecrStackName) {
-            this.ecrStackName = ecrStackName;
             return this;
         }
 

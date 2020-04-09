@@ -34,38 +34,12 @@ The -gh and -gp options indicate the GATLING_GRAPHITE_HOST and GATLING_GRAPHITE_
 
 ## AWS ECS Fargate build and deployment
 The AWS infrastructure that is needed to run the Gatling solution in the AWS cloud is available in code in the [aws-cdk](../aws-cdk) folder.
-When the stacks are created and the infrastructure is ready, the services can be built and deployed as follows:
+Deploying the gatling AWS CDK app results in creating all AWS infrastructure resources required for this solution. By using the asset 
+feature of the AWS CDK this app even builds the local Docker images for the gatling-runner, grafana and influxdb services and pushes these 
+to the Docker registry (ECR).  
 
-### Build
-#### gatling-runner
-Build and tag the gatling-runner Docker image (execute from within the gatling-runner folder):
-
-`docker build -t <AWS_ACCOUNT_ID>.dkr.ecr.eu-west-1.amazonaws.com/gatling/gatling-runner .`
-
-Push the gatling-runner docker image to ECR:
-
-`docker push <AWS_ACCOUNT_ID>.dkr.ecr.eu-west-1.amazonaws.com/gatling/gatling-runner`
-
-#### grafana
-Build and tag the grafana Docker image (execute from within the grafana folder):
-
-`docker build -t <AWS_ACCOUNT_ID>.dkr.ecr.eu-west-1.amazonaws.com/gatling/grafana .`
-
-Push the grafana docker image to ECR:
-
-`docker push <AWS_ACCOUNT_ID>.dkr.ecr.eu-west-1.amazonaws.com/gatling/grafana`
-
-#### influxdb
-Build and tag the influxdb Docker image (execute from within the influxdb folder):
-
-`docker build -t <AWS_ACCOUNT_ID>.dkr.ecr.eu-west-1.amazonaws.com/gatling/influxdb .`
-
-Push the influxdb docker image to ECR:
-
-`docker push <AWS_ACCOUNT_ID>.dkr.ecr.eu-west-1.amazonaws.com/gatling/influxdb`
-
-### Deployment
-The services can be deployed, started and stopped with the AWS CLI as follows: 
+### Starting and stopping services
+The services can be started and stopped with the AWS CLI as follows: 
 
 Start:
 ```

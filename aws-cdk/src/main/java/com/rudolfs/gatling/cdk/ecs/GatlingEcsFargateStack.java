@@ -16,6 +16,8 @@ import software.amazon.awscdk.services.servicediscovery.NamespaceType;
 public class GatlingEcsFargateStack extends Stack {
     private static final String DEFAULT_GATLING_RUNNER_SERVICE_NAME = "gatling-runner";
     private static final String DEFAULT_GATLING_DASHBOARD_SERVICE_NAME = "dashboard";
+    private static final String DEFAULT_GRAFANA_CONTAINER_NAME = "grafana";
+    private static final String DEFAULT_INFLUXDB_CONTAINER_NAME = "influxdb";
 
     private GatlingEcsFargateStack(Builder builder) {
         super(builder.getScope(), builder.getId(), builder.getStackProps());
@@ -26,7 +28,7 @@ public class GatlingEcsFargateStack extends Stack {
                 .build());
 
         // ECS Cluster setup
-        Cluster ecsCluster = Cluster.Builder.create(this, "GatlingRealtimeMonitoringLoadTest")
+        Cluster ecsCluster = Cluster.Builder.create(this, "GatlingCluster")
                 .clusterName(builder.ecsClusterName)
                 .defaultCloudMapNamespace(CloudMapNamespaceOptions.builder()
                         .name(builder.namespace)
@@ -45,16 +47,16 @@ public class GatlingEcsFargateStack extends Stack {
         // Fargate service for Grafana and InfluxDB
         GatlingDashboardFargateService.builder()
                 .serviceDiscoveryName(DEFAULT_GATLING_DASHBOARD_SERVICE_NAME)
+                .grafanaContainerName(DEFAULT_GRAFANA_CONTAINER_NAME)
+                .influxdbContainerName(DEFAULT_INFLUXDB_CONTAINER_NAME)
                 .fargateServiceProps(
                         GatlingFargateServiceProps.builder()
                                 .serviceName(DEFAULT_GATLING_DASHBOARD_SERVICE_NAME)
                                 .clusterNamespace(builder.namespace)
                                 .ecsCluster(ecsCluster)
-                                .gatlingEcrProps(builder.gatlingEcrProps)
                                 .gatlingDashboardServiceDiscoveryEndpoint(dashboardServiceEndpointHostname)
                                 .fargateExecutionRole(fargateExecutionRole)
                                 .fargateTaskRole(fargateTaskRole)
-                                .stackProps(builder.getStackProps())
                                 .vpc(vpc)
                                 .build())
                 .build(this, "GrafanaInfluxFargateService");
@@ -65,11 +67,9 @@ public class GatlingEcsFargateStack extends Stack {
                         .serviceName(DEFAULT_GATLING_RUNNER_SERVICE_NAME)
                         .clusterNamespace(builder.namespace)
                         .ecsCluster(ecsCluster)
-                        .gatlingEcrProps(builder.gatlingEcrProps)
                         .gatlingDashboardServiceDiscoveryEndpoint(dashboardServiceEndpointHostname)
                         .fargateExecutionRole(fargateExecutionRole)
                         .fargateTaskRole(fargateTaskRole)
-                        .stackProps(builder.getStackProps())
                         .vpc(vpc)
                         .build()
         );
@@ -83,7 +83,6 @@ public class GatlingEcsFargateStack extends Stack {
         private String vpcName;
         private String ecsClusterName;
         private String namespace;
-        private GatlingEcrProps gatlingEcrProps;
 
         public Builder vpcName(String vpcName) {
             this.vpcName = vpcName;
@@ -97,11 +96,6 @@ public class GatlingEcsFargateStack extends Stack {
 
         public Builder namespace(String namespace) {
             this.namespace = namespace;
-            return this;
-        }
-
-        public Builder gatlingEcrProps(GatlingEcrProps gatlingEcrProps) {
-            this.gatlingEcrProps = gatlingEcrProps;
             return this;
         }
 

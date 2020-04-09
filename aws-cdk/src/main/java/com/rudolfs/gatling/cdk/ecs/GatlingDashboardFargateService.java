@@ -7,7 +7,7 @@ import software.amazon.awscdk.services.ec2.Port;
 import software.amazon.awscdk.services.ec2.SecurityGroup;
 import software.amazon.awscdk.services.ec2.SecurityGroupProps;
 import software.amazon.awscdk.services.ec2.SubnetSelection;
-import software.amazon.awscdk.services.ecr.Repository;
+import software.amazon.awscdk.services.ecr.assets.DockerImageAsset;
 import software.amazon.awscdk.services.ecs.AwsLogDriverProps;
 import software.amazon.awscdk.services.ecs.CloudMapOptions;
 import software.amazon.awscdk.services.ecs.ContainerDefinitionOptions;
@@ -42,15 +42,13 @@ public class GatlingDashboardFargateService extends Construct {
                 .taskRole(builder.serviceProps.getFargateTaskRole())
                 .build();
 
-        final GatlingEcrProps gatlingEcrProps = builder.serviceProps.getGatlingEcrProps();
-
         ContainerDefinitionOptions grafanaContainerDefinitionOptions = new GrafanaContainerOptions(this, "GrafanaContainerOptions", builder)
                 .getContainerDefinitionOptions();
-        fargateTaskDefinition.addContainer(gatlingEcrProps.getGrafanaRepositoryName(), grafanaContainerDefinitionOptions);
+        fargateTaskDefinition.addContainer(builder.grafanaContainerName, grafanaContainerDefinitionOptions);
 
         ContainerDefinitionOptions influxContainerDefinitionOptions = new InfluxContainerOptions(this, "InfluxDBContainerOptions", builder)
                 .getContainerDefinitionOptions();
-        fargateTaskDefinition.addContainer(gatlingEcrProps.getInfluxDBRepositoryName(), influxContainerDefinitionOptions);
+        fargateTaskDefinition.addContainer(builder.influxdbContainerName, influxContainerDefinitionOptions);
 
         FargateService.Builder.create(this, id)
                 .serviceName(builder.serviceProps.getServiceName())
@@ -81,24 +79,19 @@ public class GatlingDashboardFargateService extends Construct {
             environmentVariables.put("INFLUXDB_HOST", "localhost");
             environmentVariables.put("INFLUXDB_PORT", "8086");
 
-            final GatlingEcrProps gatlingEcrProps = builder.serviceProps.getGatlingEcrProps();
+            DockerImageAsset grafanaAsset = DockerImageAsset.Builder.create(this, "grafanaAsset")
+                    .directory("../gatling-monitoring/grafana")
+                    .build();
 
             this.containerDefinitionOptions = ContainerDefinitionOptions.builder()
-                    .image(ContainerImage.fromEcrRepository(
-                            Repository.fromRepositoryAttributes(this,
-                                    "GatlingGrafanaRepository",
-                                    gatlingEcrProps.getRepositoryAttributes(
-                                            builder.serviceProps.getStackProps().getEnv().getRegion(),
-                                            builder.serviceProps.getStackProps().getEnv().getAccount(),
-                                            gatlingEcrProps.getGrafanaRepositoryName()
-                                    ))))
+                    .image(ContainerImage.fromDockerImageAsset(grafanaAsset))
                     .logging(LogDriver.awsLogs(AwsLogDriverProps.builder()
                             .logGroup(LogGroup.Builder.create(this, "grafanaFargateLogGroup")
-                                    .logGroupName(String.format("/ecs/%s", gatlingEcrProps.getRepositoryNameWithNamespace(gatlingEcrProps.getGrafanaRepositoryName())))
+                                    .logGroupName(String.format("/ecs/%s/%s", builder.serviceProps.getClusterNamespace(), builder.grafanaContainerName))
                                     .retention(RetentionDays.TWO_WEEKS)
                                     .removalPolicy(RemovalPolicy.DESTROY)
                                     .build())
-                            .streamPrefix(gatlingEcrProps.getGrafanaRepositoryName())
+                            .streamPrefix(builder.grafanaContainerName)
                             .build()))
                     .environment(environmentVariables)
                     .build();
@@ -115,24 +108,19 @@ public class GatlingDashboardFargateService extends Construct {
         public InfluxContainerOptions(Construct scope, String id, GatlingDashboardFargateService.Builder builder) {
             super(scope, id);
 
-            final GatlingEcrProps gatlingEcrProps = builder.serviceProps.getGatlingEcrProps();
+            DockerImageAsset influxdbAsset = DockerImageAsset.Builder.create(this, "influxdbAsset")
+                    .directory("../gatling-monitoring/influxdb")
+                    .build();
 
             this.containerDefinitionOptions = ContainerDefinitionOptions.builder()
-                    .image(ContainerImage.fromEcrRepository(
-                            Repository.fromRepositoryAttributes(this,
-                                    "GatlingInfluxDBRepository",
-                                    gatlingEcrProps.getRepositoryAttributes(
-                                            builder.serviceProps.getStackProps().getEnv().getRegion(),
-                                            builder.serviceProps.getStackProps().getEnv().getAccount(),
-                                            gatlingEcrProps.getInfluxDBRepositoryName()
-                                    ))))
+                    .image(ContainerImage.fromDockerImageAsset(influxdbAsset))
                     .logging(LogDriver.awsLogs(AwsLogDriverProps.builder()
                             .logGroup(LogGroup.Builder.create(this, "influxdbFargateLogGroup")
-                                    .logGroupName(String.format("/ecs/%s", gatlingEcrProps.getRepositoryNameWithNamespace(gatlingEcrProps.getInfluxDBRepositoryName())))
+                                    .logGroupName(String.format("/ecs/%s/%s", builder.serviceProps.getClusterNamespace(), builder.influxdbContainerName))
                                     .retention(RetentionDays.TWO_WEEKS)
                                     .removalPolicy(RemovalPolicy.DESTROY)
                                     .build())
-                            .streamPrefix(gatlingEcrProps.getInfluxDBRepositoryName())
+                            .streamPrefix(builder.influxdbContainerName)
                             .build()))
                     .build();
         }
@@ -149,6 +137,8 @@ public class GatlingDashboardFargateService extends Construct {
     public static final class Builder {
         private GatlingFargateServiceProps serviceProps;
         private String serviceDiscoveryName;
+        private String grafanaContainerName;
+        private String influxdbContainerName;
 
         public Builder fargateServiceProps(GatlingFargateServiceProps props) {
             this.serviceProps = props;
@@ -157,6 +147,16 @@ public class GatlingDashboardFargateService extends Construct {
 
         public Builder serviceDiscoveryName(String serviceDiscoveryName) {
             this.serviceDiscoveryName = serviceDiscoveryName;
+            return this;
+        }
+
+        public Builder grafanaContainerName(String grafanaContainerName) {
+            this.grafanaContainerName = grafanaContainerName;
+            return this;
+        }
+
+        public Builder influxdbContainerName(String influxdbContainerName) {
+            this.influxdbContainerName = influxdbContainerName;
             return this;
         }
 

@@ -5,7 +5,7 @@
 
     <groupId>com.rudolfs.gatling.cdk</groupId>
     <artifactId>gatling-aws-cdk</artifactId>
-    <version>0.1</version>
+    <version>0.0.1</version>
 
     <properties>
         <maven.compiler.release>11</maven.compiler.release>
@@ -14,9 +14,10 @@
         <!-- Maven plugin versions -->
         <maven-compiler-plugin.version>3.8.1</maven-compiler-plugin.version>
         <maven-exec-plugin.version>1.6.0</maven-exec-plugin.version>
+        <maven-shade-plugin.version>3.2.2</maven-shade-plugin.version>
 
         <!-- Dependency versions -->
-        <aws-cdk.version>1.31.0</aws-cdk.version>
+        <aws-cdk.version>1.32.1</aws-cdk.version>
         <junit.jupiter.version>5.5.0</junit.jupiter.version>
     </properties>
 
@@ -38,6 +39,28 @@
                 <configuration>
                     <mainClass>com.rudolfs.gatling.cdk.GatlingRealtimeMonitoringCdkApp</mainClass>
                 </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-shade-plugin</artifactId>
+                <version>${maven-shade-plugin.version}</version>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>shade</goal>
+                        </goals>
+                        <configuration>
+                            <shadedArtifactAttached>true</shadedArtifactAttached>
+                            <transformers>
+                                <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+                                    <mainClass>com.rudolfs.gatling.cdk.GatlingRealtimeMonitoringCdkApp</mainClass>
+                                </transformer>
+                            </transformers>
+                        </configuration>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>
@@ -67,6 +90,11 @@
         <dependency>
             <groupId>software.amazon.awscdk</groupId>
             <artifactId>ecr</artifactId>
+            <version>${aws-cdk.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>software.amazon.awscdk</groupId>
+            <artifactId>ecr-assets</artifactId>
             <version>${aws-cdk.version}</version>
         </dependency>
         <dependency>

@@ -1,6 +1,5 @@
 package com.rudolfs.gatling.cdk.ecs;
 
-import software.amazon.awscdk.core.StackProps;
 import software.amazon.awscdk.services.ec2.IVpc;
 import software.amazon.awscdk.services.ecs.ICluster;
 import software.amazon.awscdk.services.iam.Role;
@@ -24,10 +23,6 @@ public interface GatlingFargateServiceProps {
 
     String getGatlingDashboardServiceDiscoveryEndpoint();
 
-    GatlingEcrProps getGatlingEcrProps();
-
-    StackProps getStackProps();
-
     class Builder {
         private IVpc vpc;
         private ICluster ecsCluster;
@@ -36,8 +31,6 @@ public interface GatlingFargateServiceProps {
         private String serviceName;
         private String clusterNamespace;
         private String gatlingDashboardServiceDiscoveryEndpoint;
-        private GatlingEcrProps gatlingEcrProps;
-        private StackProps stackProps;
 
         public Builder vpc(final IVpc vpc) {
             this.vpc = vpc;
@@ -71,16 +64,6 @@ public interface GatlingFargateServiceProps {
 
         public Builder gatlingDashboardServiceDiscoveryEndpoint(String endpoint) {
             this.gatlingDashboardServiceDiscoveryEndpoint = endpoint;
-            return this;
-        }
-
-        public Builder gatlingEcrProps(final GatlingEcrProps gatlingEcrProps) {
-            this.gatlingEcrProps = gatlingEcrProps;
-            return this;
-        }
-
-        public Builder stackProps(final StackProps stackProps) {
-            this.stackProps = stackProps;
             return this;
         }
 
@@ -119,16 +102,6 @@ public interface GatlingFargateServiceProps {
                 @Override
                 public String getGatlingDashboardServiceDiscoveryEndpoint() {
                     return gatlingDashboardServiceDiscoveryEndpoint;
-                }
-
-                @Override
-                public GatlingEcrProps getGatlingEcrProps() {
-                    return gatlingEcrProps;
-                }
-
-                @Override
-                public StackProps getStackProps() {
-                    return stackProps;
                 }
             };
         }

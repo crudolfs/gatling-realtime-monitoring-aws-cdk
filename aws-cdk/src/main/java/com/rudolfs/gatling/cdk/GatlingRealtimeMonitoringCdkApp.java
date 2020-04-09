@@ -1,7 +1,5 @@
 package com.rudolfs.gatling.cdk;
 
-import com.rudolfs.gatling.cdk.ecs.GatlingEcrProps;
-import com.rudolfs.gatling.cdk.ecs.GatlingEcrStack;
 import com.rudolfs.gatling.cdk.ecs.GatlingEcsFargateStack;
 import com.rudolfs.gatling.cdk.pipeline.GatlingPipelineStack;
 import com.rudolfs.gatling.cdk.vpc.GatlingVpcStack;
@@ -25,7 +23,6 @@ public class GatlingRealtimeMonitoringCdkApp {
         final String projectName = System.getenv("PROJECT_NAME") == null ? DEFAULT_PROJECT_NAME : System.getenv("PROJECT_NAME");
         final String vpcName = System.getenv("VPC_NAME") == null ? projectName + "-vpc" : System.getenv("VPC_NAME");
         final String vpcStackName = projectName + "VpcStack";
-        final String ecrStackName = projectName + "EcrStack";
         final String ecsFargateStackName = projectName + "EcsFargateStack";
         final String pipelineStackName = projectName + "PipelineStack";
         final String pipelineName = projectName + "-pipeline";
@@ -39,26 +36,15 @@ public class GatlingRealtimeMonitoringCdkApp {
 
         new GatlingVpcStack(app, vpcStackName, stackProps, vpcName);
 
-        final GatlingEcrProps gatlingEcrProps = GatlingEcrProps.builder()
-                .repositoryNamespace(projectName)
-                .gatlingRunnerRepositoryName("gatling-runner")
-                .grafanaRepositoryName("grafana")
-                .influxDBRepositoryName("influxdb")
-                .build();
-
-        new GatlingEcrStack(app, ecrStackName, stackProps, gatlingEcrProps);
-
         GatlingEcsFargateStack.builder().scope(app).id(ecsFargateStackName).stackProps(stackProps)
                 .namespace(projectName)
                 .ecsClusterName(projectName + "-cluster")
                 .vpcName(vpcName)
-                .gatlingEcrProps(gatlingEcrProps)
                 .build();
 
         GatlingPipelineStack.builder().scope(app).id(pipelineStackName).stackProps(stackProps)
                 .pipelineName(pipelineName)
                 .vpcStackName(vpcStackName)
-                .ecrStackName(ecrStackName)
                 .ecsFargateStackName(ecsFargateStackName)
                 .build();
 

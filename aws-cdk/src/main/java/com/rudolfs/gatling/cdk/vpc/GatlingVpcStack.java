@@ -9,7 +9,7 @@ import software.amazon.awscdk.services.ec2.SubnetConfiguration;
 import software.amazon.awscdk.services.ec2.SubnetType;
 import software.amazon.awscdk.services.ec2.Vpc;
 
-import java.util.Arrays;
+import java.util.List;
 
 import static java.util.Collections.singletonList;
 
@@ -27,7 +27,7 @@ public class GatlingVpcStack extends Stack {
         final Vpc vpc = Vpc.Builder.create(this, "GatlingVpc")
                 .cidr("10.12.0.0/16")
                 .maxAzs(2)
-                .subnetConfiguration(Arrays.asList(privateSubnet, publicSubnet))
+                .subnetConfiguration(List.of(privateSubnet, publicSubnet))
                 .build();
 
         Tag.add(vpc, "Name", vpcName, TagProps.builder()

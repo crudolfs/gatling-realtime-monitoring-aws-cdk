@@ -5,7 +5,7 @@ import software.amazon.awscdk.core.RemovalPolicy;
 import software.amazon.awscdk.services.ec2.SecurityGroup;
 import software.amazon.awscdk.services.ec2.SecurityGroupProps;
 import software.amazon.awscdk.services.ec2.SubnetSelection;
-import software.amazon.awscdk.services.ecr.Repository;
+import software.amazon.awscdk.services.ecr.assets.DockerImageAsset;
 import software.amazon.awscdk.services.ecs.AwsLogDriverProps;
 import software.amazon.awscdk.services.ecs.ContainerDefinitionOptions;
 import software.amazon.awscdk.services.ecs.ContainerImage;
@@ -15,7 +15,7 @@ import software.amazon.awscdk.services.ecs.LogDriver;
 import software.amazon.awscdk.services.logs.LogGroup;
 import software.amazon.awscdk.services.logs.RetentionDays;
 
-import java.util.Arrays;
+import java.util.List;
 
 public class GatlingRunnerFargateService extends Construct {
 
@@ -34,22 +34,15 @@ public class GatlingRunnerFargateService extends Construct {
                 .taskRole(serviceProps.getFargateTaskRole())
                 .build();
 
-        final GatlingEcrProps gatlingEcrProps = serviceProps.getGatlingEcrProps();
-        final String logGroupName = String.format("/ecs/%s", gatlingEcrProps.getRepositoryNameWithNamespace(gatlingEcrProps.getGatlingRunnerRepositoryName()));
+        final String logGroupName = String.format("/ecs/%s/%s", serviceProps.getClusterNamespace(), serviceProps.getServiceName());
+
+        DockerImageAsset gatlingRunnerAsset = DockerImageAsset.Builder.create(this, "gatlingRunnerAsset")
+                .directory("../gatling-monitoring/gatling-runner")
+                .build();
 
         ContainerDefinitionOptions containerDefinitionOptions = ContainerDefinitionOptions.builder()
-                .image(ContainerImage.fromEcrRepository(
-                        Repository.fromRepositoryAttributes(this,
-                                "GatlingRunnerRepository",
-                                gatlingEcrProps.getRepositoryAttributes(
-                                        serviceProps.getStackProps().getEnv().getRegion(),
-                                        serviceProps.getStackProps().getEnv().getAccount(),
-                                        gatlingEcrProps.getGatlingRunnerRepositoryName())
-                        )))
-                .command(Arrays.asList(
-                        "-gh",
-                        serviceProps.getGatlingDashboardServiceDiscoveryEndpoint()
-                ))
+                .image(ContainerImage.fromDockerImageAsset(gatlingRunnerAsset))
+                .command(List.of("-gh", serviceProps.getGatlingDashboardServiceDiscoveryEndpoint()))
                 .logging(LogDriver.awsLogs(AwsLogDriverProps.builder()
                         .logGroup(LogGroup.Builder.create(this, "gatlingRunnerFargateLogGroup")
                                 .logGroupName(logGroupName)
