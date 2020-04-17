@@ -102,7 +102,7 @@ public class GatlingEcsStack extends Stack {
                 ).build(this, "GrafanaFargateService");
 
         // EC2 (stateful) service for InfluxDB
-        new InfluxdbEc2Service(this, "InfluxdbFargateService",
+        new InfluxdbEc2Service(this, "InfluxdbEc2Service",
                 GatlingEcsServiceProps.builder()
                         .serviceName(DEFAULT_INFLUXDB_SERVICE_NAME)
                         .clusterNamespace(builder.namespace)

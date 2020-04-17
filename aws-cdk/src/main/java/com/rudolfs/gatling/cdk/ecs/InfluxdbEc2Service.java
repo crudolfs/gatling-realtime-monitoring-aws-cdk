@@ -100,7 +100,7 @@ public class InfluxdbEc2Service extends Construct {
                     .memoryReservationMiB(3896)
                     .cpu(2048)
                     .logging(LogDriver.awsLogs(AwsLogDriverProps.builder()
-                            .logGroup(LogGroup.Builder.create(this, "influxdbFargateLogGroup")
+                            .logGroup(LogGroup.Builder.create(this, "influxdbLogGroup")
                                     .logGroupName(String.format("/ecs/%s/%s", serviceProps.getClusterNamespace(), serviceProps.getServiceName()))
                                     .retention(RetentionDays.TWO_WEEKS)
                                     .removalPolicy(RemovalPolicy.DESTROY)
