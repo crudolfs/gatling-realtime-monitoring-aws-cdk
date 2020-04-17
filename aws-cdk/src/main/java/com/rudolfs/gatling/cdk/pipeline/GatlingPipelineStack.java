@@ -65,11 +65,11 @@ public class GatlingPipelineStack extends Stack {
                                 .templatePath(cdkBuildOutput.atPath(builder.vpcStackName + ".template.json"))
                                 .build(),
                         CloudFormationCreateUpdateStackAction.Builder.create()
-                                .actionName("EcsFargateStackUpdate")
+                                .actionName("EcsStackUpdate")
                                 .adminPermissions(true)
                                 .runOrder(3)
-                                .stackName(builder.ecsFargateStackName)
-                                .templatePath(cdkBuildOutput.atPath(builder.ecsFargateStackName + ".template.json"))
+                                .stackName(builder.ecsStackName)
+                                .templatePath(cdkBuildOutput.atPath(builder.ecsStackName + ".template.json"))
                                 .build()))
                 .build();
 
@@ -88,7 +88,7 @@ public class GatlingPipelineStack extends Stack {
     public static final class Builder extends StackBuilder<Builder> {
         private String pipelineName;
         private String vpcStackName;
-        private String ecsFargateStackName;
+        private String ecsStackName;
 
         public Builder pipelineName(String pipelineName) {
             this.pipelineName = pipelineName;
@@ -100,8 +100,8 @@ public class GatlingPipelineStack extends Stack {
             return this;
         }
 
-        public Builder ecsFargateStackName(String ecsFargateStackName) {
-            this.ecsFargateStackName = ecsFargateStackName;
+        public Builder ecsStackName(String ecsStackName) {
+            this.ecsStackName = ecsStackName;
             return this;
         }
 

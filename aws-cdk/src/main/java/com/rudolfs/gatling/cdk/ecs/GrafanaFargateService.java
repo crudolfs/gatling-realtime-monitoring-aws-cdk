@@ -22,33 +22,28 @@ import software.amazon.awscdk.services.servicediscovery.DnsRecordType;
 import java.util.HashMap;
 import java.util.Map;
 
-public class GatlingDashboardFargateService extends Construct {
+public class GrafanaFargateService extends Construct {
 
-    public GatlingDashboardFargateService(Construct scope, String id, Builder builder) {
+    public GrafanaFargateService(Construct scope, String id, Builder builder) {
         super(scope, id);
 
-        SecurityGroup securityGroup = new SecurityGroup(this, "GrafanaInfluxSecurityGroup", SecurityGroupProps.builder()
+        SecurityGroup securityGroup = new SecurityGroup(this, "GrafanaSecurityGroup", SecurityGroupProps.builder()
                 .vpc(builder.serviceProps.getVpc())
                 .description(String.format("%s security group", builder.serviceProps.getServiceName()))
                 .build());
         securityGroup.addIngressRule(Peer.anyIpv4(), Port.tcp(3000), "The default port that runs the Grafana UI.");
-        securityGroup.addIngressRule(Peer.anyIpv4(), Port.tcp(8086), "The default port that runs the InfluxDB HTTP service.");
-        securityGroup.addIngressRule(Peer.anyIpv4(), Port.tcp(2003), "The default port that runs the Graphite service.");
 
-        FargateTaskDefinition fargateTaskDefinition = FargateTaskDefinition.Builder.create(this, "GrafanaInfluxTaskDefinition")
-                .cpu(256)
-                .memoryLimitMiB(512)
+        FargateTaskDefinition fargateTaskDefinition = FargateTaskDefinition.Builder.create(this, "GrafanaTaskDefinition")
+                .cpu(1024)
+                .memoryLimitMiB(2048)
                 .executionRole(builder.serviceProps.getFargateExecutionRole())
                 .taskRole(builder.serviceProps.getFargateTaskRole())
                 .build();
 
         ContainerDefinitionOptions grafanaContainerDefinitionOptions = new GrafanaContainerOptions(this, "GrafanaContainerOptions", builder)
                 .getContainerDefinitionOptions();
-        fargateTaskDefinition.addContainer(builder.grafanaContainerName, grafanaContainerDefinitionOptions);
+        fargateTaskDefinition.addContainer(builder.serviceProps.getServiceName(), grafanaContainerDefinitionOptions);
 
-        ContainerDefinitionOptions influxContainerDefinitionOptions = new InfluxContainerOptions(this, "InfluxDBContainerOptions", builder)
-                .getContainerDefinitionOptions();
-        fargateTaskDefinition.addContainer(builder.influxdbContainerName, influxContainerDefinitionOptions);
 
         FargateService.Builder.create(this, id)
                 .serviceName(builder.serviceProps.getServiceName())
@@ -57,7 +52,7 @@ public class GatlingDashboardFargateService extends Construct {
                 .cloudMapOptions(CloudMapOptions.builder()
                         .cloudMapNamespace(builder.serviceProps.getEcsCluster().getDefaultCloudMapNamespace())
                         .dnsRecordType(DnsRecordType.A)
-                        .name(builder.serviceDiscoveryName)
+                        .name(builder.serviceProps.getServiceName())
                         .build())
                 .cluster(builder.serviceProps.getEcsCluster())
                 .securityGroup(securityGroup)
@@ -71,12 +66,12 @@ public class GatlingDashboardFargateService extends Construct {
     static class GrafanaContainerOptions extends Construct {
         private final ContainerDefinitionOptions containerDefinitionOptions;
 
-        public GrafanaContainerOptions(Construct scope, String id, GatlingDashboardFargateService.Builder builder) {
+        public GrafanaContainerOptions(Construct scope, String id, GrafanaFargateService.Builder builder) {
             super(scope, id);
 
             Map<String, String> environmentVariables = new HashMap<>();
             environmentVariables.put("INFLUXDB_ACCESS_MODE", "proxy");
-            environmentVariables.put("INFLUXDB_HOST", "localhost");
+            environmentVariables.put("INFLUXDB_HOST", builder.influxdbHostName);
             environmentVariables.put("INFLUXDB_PORT", "8086");
 
             DockerImageAsset grafanaAsset = DockerImageAsset.Builder.create(this, "grafanaAsset")
@@ -87,41 +82,13 @@ public class GatlingDashboardFargateService extends Construct {
                     .image(ContainerImage.fromDockerImageAsset(grafanaAsset))
                     .logging(LogDriver.awsLogs(AwsLogDriverProps.builder()
                             .logGroup(LogGroup.Builder.create(this, "grafanaFargateLogGroup")
-                                    .logGroupName(String.format("/ecs/%s/%s", builder.serviceProps.getClusterNamespace(), builder.grafanaContainerName))
+                                    .logGroupName(String.format("/ecs/%s/%s", builder.serviceProps.getClusterNamespace(), builder.serviceProps.getServiceName()))
                                     .retention(RetentionDays.TWO_WEEKS)
                                     .removalPolicy(RemovalPolicy.DESTROY)
                                     .build())
-                            .streamPrefix(builder.grafanaContainerName)
+                            .streamPrefix(builder.serviceProps.getServiceName())
                             .build()))
                     .environment(environmentVariables)
-                    .build();
-        }
-
-        public ContainerDefinitionOptions getContainerDefinitionOptions() {
-            return this.containerDefinitionOptions;
-        }
-    }
-
-    static class InfluxContainerOptions extends Construct {
-        private final ContainerDefinitionOptions containerDefinitionOptions;
-
-        public InfluxContainerOptions(Construct scope, String id, GatlingDashboardFargateService.Builder builder) {
-            super(scope, id);
-
-            DockerImageAsset influxdbAsset = DockerImageAsset.Builder.create(this, "influxdbAsset")
-                    .directory("../gatling-monitoring/influxdb")
-                    .build();
-
-            this.containerDefinitionOptions = ContainerDefinitionOptions.builder()
-                    .image(ContainerImage.fromDockerImageAsset(influxdbAsset))
-                    .logging(LogDriver.awsLogs(AwsLogDriverProps.builder()
-                            .logGroup(LogGroup.Builder.create(this, "influxdbFargateLogGroup")
-                                    .logGroupName(String.format("/ecs/%s/%s", builder.serviceProps.getClusterNamespace(), builder.influxdbContainerName))
-                                    .retention(RetentionDays.TWO_WEEKS)
-                                    .removalPolicy(RemovalPolicy.DESTROY)
-                                    .build())
-                            .streamPrefix(builder.influxdbContainerName)
-                            .build()))
                     .build();
         }
 
@@ -135,33 +102,21 @@ public class GatlingDashboardFargateService extends Construct {
     }
 
     public static final class Builder {
-        private GatlingFargateServiceProps serviceProps;
-        private String serviceDiscoveryName;
-        private String grafanaContainerName;
-        private String influxdbContainerName;
+        private GatlingEcsServiceProps serviceProps;
+        private String influxdbHostName;
 
-        public Builder fargateServiceProps(GatlingFargateServiceProps props) {
+        public Builder fargateServiceProps(GatlingEcsServiceProps props) {
             this.serviceProps = props;
             return this;
         }
 
-        public Builder serviceDiscoveryName(String serviceDiscoveryName) {
-            this.serviceDiscoveryName = serviceDiscoveryName;
+        public Builder influxdbHostName(String influxdbHostName) {
+            this.influxdbHostName = influxdbHostName;
             return this;
         }
 
-        public Builder grafanaContainerName(String grafanaContainerName) {
-            this.grafanaContainerName = grafanaContainerName;
-            return this;
-        }
-
-        public Builder influxdbContainerName(String influxdbContainerName) {
-            this.influxdbContainerName = influxdbContainerName;
-            return this;
-        }
-
-        public GatlingDashboardFargateService build(Construct scope, String id) {
-            return new GatlingDashboardFargateService(scope, id, this);
+        public GrafanaFargateService build(Construct scope, String id) {
+            return new GrafanaFargateService(scope, id, this);
         }
     }
 }

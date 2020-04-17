@@ -102,6 +102,26 @@
             <artifactId>ecs</artifactId>
             <version>${aws-cdk.version}</version>
         </dependency>
+        <dependency>
+            <groupId>software.amazon.awscdk</groupId>
+            <artifactId>applicationautoscaling</artifactId>
+            <version>${aws-cdk.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>software.amazon.awscdk</groupId>
+            <artifactId>autoscaling</artifactId>
+            <version>${aws-cdk.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>software.amazon.awscdk</groupId>
+            <artifactId>autoscaling-common</artifactId>
+            <version>${aws-cdk.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>software.amazon.awscdk</groupId>
+            <artifactId>autoscaling-hooktargets</artifactId>
+            <version>${aws-cdk.version}</version>
+        </dependency>
 
         <dependency>
             <groupId>org.junit.jupiter</groupId>

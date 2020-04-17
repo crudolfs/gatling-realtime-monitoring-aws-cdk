@@ -23,7 +23,7 @@ public class FargateTaskRole extends Role {
                 .build());
     }
 
-    public FargateTaskRole(Construct scope, String id, RoleProps props) {
+    private FargateTaskRole(Construct scope, String id, RoleProps props) {
         super(scope, id, props);
     }
 

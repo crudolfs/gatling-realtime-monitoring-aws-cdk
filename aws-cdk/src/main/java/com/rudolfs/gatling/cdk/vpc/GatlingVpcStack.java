@@ -21,10 +21,10 @@ public class GatlingVpcStack extends Stack {
     public GatlingVpcStack(Construct scope, String id, StackProps stackProps, String vpcName) {
         super(scope, id, stackProps);
 
-        final SubnetConfiguration privateSubnet = subnet("gatling-private-subnet", 19, SubnetType.PRIVATE);
-        final SubnetConfiguration publicSubnet = subnet("gatling-public-subnet", 20, SubnetType.PUBLIC);
+        SubnetConfiguration privateSubnet = subnet("gatling-private-subnet", 19, SubnetType.PRIVATE);
+        SubnetConfiguration publicSubnet = subnet("gatling-public-subnet", 20, SubnetType.PUBLIC);
 
-        final Vpc vpc = Vpc.Builder.create(this, "GatlingVpc")
+        Vpc vpc = Vpc.Builder.create(this, "GatlingVpc")
                 .cidr("10.12.0.0/16")
                 .maxAzs(2)
                 .subnetConfiguration(List.of(privateSubnet, publicSubnet))

@@ -18,7 +18,7 @@ public class FargateExecutionRole extends Role {
                 .build());
     }
 
-    public FargateExecutionRole(Construct scope, String id, RoleProps props) {
+    private FargateExecutionRole(Construct scope, String id, RoleProps props) {
         super(scope, id, props);
     }
 }

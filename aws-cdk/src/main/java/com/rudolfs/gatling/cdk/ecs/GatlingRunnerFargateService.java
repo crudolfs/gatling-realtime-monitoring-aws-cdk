@@ -19,22 +19,22 @@ import java.util.List;
 
 public class GatlingRunnerFargateService extends Construct {
 
-    public GatlingRunnerFargateService(Construct scope, String id, GatlingFargateServiceProps serviceProps) {
+    public GatlingRunnerFargateService(Construct scope, String id, Builder builder) {
         super(scope, id);
 
         SecurityGroup securityGroup = new SecurityGroup(this, "GatlingRunnerSecurityGroup", SecurityGroupProps.builder()
-                .vpc(serviceProps.getVpc())
-                .description(String.format("%s security group", serviceProps.getServiceName()))
+                .vpc(builder.serviceProps.getVpc())
+                .description(String.format("%s security group", builder.serviceProps.getServiceName()))
                 .build());
 
         FargateTaskDefinition fargateTaskDefinition = FargateTaskDefinition.Builder.create(this, "GatlingRunnerFargateTaskDefinition")
                 .cpu(1024)
                 .memoryLimitMiB(2048)
-                .executionRole(serviceProps.getFargateExecutionRole())
-                .taskRole(serviceProps.getFargateTaskRole())
+                .executionRole(builder.serviceProps.getFargateExecutionRole())
+                .taskRole(builder.serviceProps.getFargateTaskRole())
                 .build();
 
-        final String logGroupName = String.format("/ecs/%s/%s", serviceProps.getClusterNamespace(), serviceProps.getServiceName());
+        String logGroupName = String.format("/ecs/%s/%s", builder.serviceProps.getClusterNamespace(), builder.serviceProps.getServiceName());
 
         DockerImageAsset gatlingRunnerAsset = DockerImageAsset.Builder.create(this, "gatlingRunnerAsset")
                 .directory("../gatling-monitoring/gatling-runner")
@@ -42,28 +42,51 @@ public class GatlingRunnerFargateService extends Construct {
 
         ContainerDefinitionOptions containerDefinitionOptions = ContainerDefinitionOptions.builder()
                 .image(ContainerImage.fromDockerImageAsset(gatlingRunnerAsset))
-                .command(List.of("-gh", serviceProps.getGatlingDashboardServiceDiscoveryEndpoint()))
+                .command(List.of("-gh", builder.influxdbHostName))
                 .logging(LogDriver.awsLogs(AwsLogDriverProps.builder()
                         .logGroup(LogGroup.Builder.create(this, "gatlingRunnerFargateLogGroup")
                                 .logGroupName(logGroupName)
                                 .retention(RetentionDays.TWO_WEEKS)
                                 .removalPolicy(RemovalPolicy.DESTROY)
                                 .build())
-                        .streamPrefix(serviceProps.getServiceName())
+                        .streamPrefix(builder.serviceProps.getServiceName())
                         .build()))
                 .build();
 
         fargateTaskDefinition.addContainer("gatlingRunnerContainer", containerDefinitionOptions);
 
         FargateService.Builder.create(this, id)
-                .serviceName(serviceProps.getServiceName())
+                .serviceName(builder.serviceProps.getServiceName())
                 .taskDefinition(fargateTaskDefinition)
                 .desiredCount(0)
-                .cluster(serviceProps.getEcsCluster())
+                .cluster(builder.serviceProps.getEcsCluster())
                 .securityGroup(securityGroup)
                 .vpcSubnets(SubnetSelection.builder()
-                        .subnets(serviceProps.getVpc().getPrivateSubnets())
+                        .subnets(builder.serviceProps.getVpc().getPrivateSubnets())
                         .build())
                 .build();
+    }
+
+    public static Builder builder() {
+        return new Builder();
+    }
+
+    public static final class Builder {
+        private GatlingEcsServiceProps serviceProps;
+        private String influxdbHostName;
+
+        public Builder fargateServiceProps(GatlingEcsServiceProps props) {
+            this.serviceProps = props;
+            return this;
+        }
+
+        public Builder influxdbHostName(String influxdbHostName) {
+            this.influxdbHostName = influxdbHostName;
+            return this;
+        }
+
+        public GatlingRunnerFargateService build(Construct scope, String id) {
+            return new GatlingRunnerFargateService(scope, id, this);
+        }
     }
 }

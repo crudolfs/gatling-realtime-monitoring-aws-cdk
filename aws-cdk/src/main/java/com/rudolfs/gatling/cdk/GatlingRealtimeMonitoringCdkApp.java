@@ -1,6 +1,6 @@
 package com.rudolfs.gatling.cdk;
 
-import com.rudolfs.gatling.cdk.ecs.GatlingEcsFargateStack;
+import com.rudolfs.gatling.cdk.ecs.GatlingEcsStack;
 import com.rudolfs.gatling.cdk.pipeline.GatlingPipelineStack;
 import com.rudolfs.gatling.cdk.vpc.GatlingVpcStack;
 import software.amazon.awscdk.core.App;
@@ -23,7 +23,7 @@ public class GatlingRealtimeMonitoringCdkApp {
         final String projectName = System.getenv("PROJECT_NAME") == null ? DEFAULT_PROJECT_NAME : System.getenv("PROJECT_NAME");
         final String vpcName = System.getenv("VPC_NAME") == null ? projectName + "-vpc" : System.getenv("VPC_NAME");
         final String vpcStackName = projectName + "VpcStack";
-        final String ecsFargateStackName = projectName + "EcsFargateStack";
+        final String ecsStackName = projectName + "EcsStack";
         final String pipelineStackName = projectName + "PipelineStack";
         final String pipelineName = projectName + "-pipeline";
 
@@ -36,7 +36,7 @@ public class GatlingRealtimeMonitoringCdkApp {
 
         new GatlingVpcStack(app, vpcStackName, stackProps, vpcName);
 
-        GatlingEcsFargateStack.builder().scope(app).id(ecsFargateStackName).stackProps(stackProps)
+        GatlingEcsStack.builder().scope(app).id(ecsStackName).stackProps(stackProps)
                 .namespace(projectName)
                 .ecsClusterName(projectName + "-cluster")
                 .vpcName(vpcName)
@@ -45,7 +45,7 @@ public class GatlingRealtimeMonitoringCdkApp {
         GatlingPipelineStack.builder().scope(app).id(pipelineStackName).stackProps(stackProps)
                 .pipelineName(pipelineName)
                 .vpcStackName(vpcStackName)
-                .ecsFargateStackName(ecsFargateStackName)
+                .ecsStackName(ecsStackName)
                 .build();
 
         app.synth();

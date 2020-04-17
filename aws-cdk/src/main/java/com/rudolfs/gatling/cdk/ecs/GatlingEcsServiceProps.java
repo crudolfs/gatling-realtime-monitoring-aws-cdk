@@ -4,7 +4,7 @@ import software.amazon.awscdk.services.ec2.IVpc;
 import software.amazon.awscdk.services.ecs.ICluster;
 import software.amazon.awscdk.services.iam.Role;
 
-public interface GatlingFargateServiceProps {
+public interface GatlingEcsServiceProps {
     static Builder builder() {
         return new Builder();
     }
@@ -21,8 +21,6 @@ public interface GatlingFargateServiceProps {
 
     String getClusterNamespace();
 
-    String getGatlingDashboardServiceDiscoveryEndpoint();
-
     class Builder {
         private IVpc vpc;
         private ICluster ecsCluster;
@@ -30,7 +28,6 @@ public interface GatlingFargateServiceProps {
         private Role fargateTaskRole;
         private String serviceName;
         private String clusterNamespace;
-        private String gatlingDashboardServiceDiscoveryEndpoint;
 
         public Builder vpc(final IVpc vpc) {
             this.vpc = vpc;
@@ -62,13 +59,8 @@ public interface GatlingFargateServiceProps {
             return this;
         }
 
-        public Builder gatlingDashboardServiceDiscoveryEndpoint(String endpoint) {
-            this.gatlingDashboardServiceDiscoveryEndpoint = endpoint;
-            return this;
-        }
-
-        GatlingFargateServiceProps build() {
-            return new GatlingFargateServiceProps() {
+        GatlingEcsServiceProps build() {
+            return new GatlingEcsServiceProps() {
                 @Override
                 public String getServiceName() {
                     return serviceName;
@@ -97,11 +89,6 @@ public interface GatlingFargateServiceProps {
                 @Override
                 public Role getFargateTaskRole() {
                     return fargateTaskRole;
-                }
-
-                @Override
-                public String getGatlingDashboardServiceDiscoveryEndpoint() {
-                    return gatlingDashboardServiceDiscoveryEndpoint;
                 }
             };
         }
