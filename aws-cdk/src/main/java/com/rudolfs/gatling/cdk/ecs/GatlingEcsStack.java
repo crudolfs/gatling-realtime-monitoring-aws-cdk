@@ -10,8 +10,6 @@ import software.amazon.awscdk.services.ec2.InstanceSize;
 import software.amazon.awscdk.services.ec2.InstanceType;
 import software.amazon.awscdk.services.ec2.SubnetSelection;
 import software.amazon.awscdk.services.ec2.UserData;
-import software.amazon.awscdk.services.ec2.Vpc;
-import software.amazon.awscdk.services.ec2.VpcLookupOptions;
 import software.amazon.awscdk.services.ecs.CloudMapNamespaceOptions;
 import software.amazon.awscdk.services.ecs.Cluster;
 import software.amazon.awscdk.services.ecs.EcsOptimizedImage;
@@ -20,6 +18,7 @@ import software.amazon.awscdk.services.iam.Role;
 import software.amazon.awscdk.services.servicediscovery.NamespaceType;
 
 import java.util.List;
+import java.util.function.Supplier;
 
 /**
  * Creates the CloudFormation for the AWS ECS Cluster and Services for the Gatling Real-Time Monitoring stack.
@@ -34,10 +33,7 @@ public class GatlingEcsStack extends Stack {
     private GatlingEcsStack(Builder builder) {
         super(builder.getScope(), builder.getId(), builder.getStackProps());
 
-        // VPC and subnets lookup
-        IVpc vpc = Vpc.fromLookup(this, "gatlingVpc", VpcLookupOptions.builder()
-                .vpcName(builder.vpcName)
-                .build());
+        IVpc vpc = builder.vpcSupplier.get();
 
         // ECS Cluster setup
         Cluster ecsCluster = Cluster.Builder.create(this, "GatlingCluster")
@@ -133,12 +129,12 @@ public class GatlingEcsStack extends Stack {
     }
 
     public static final class Builder extends StackBuilder<Builder> {
-        private String vpcName;
+        private Supplier<IVpc> vpcSupplier;
         private String ecsClusterName;
         private String namespace;
 
-        public Builder vpcName(String vpcName) {
-            this.vpcName = vpcName;
+        public Builder vpc(Supplier<IVpc> vpc) {
+            this.vpcSupplier = vpc;
             return this;
         }
 
