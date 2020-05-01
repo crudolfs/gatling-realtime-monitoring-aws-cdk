@@ -43,7 +43,6 @@ public class GatlingRealtimeMonitoringCdkApp {
 
         GatlingEcsStack.builder().scope(app).id(ecsStackName).stackProps(stackProps)
                 .namespace(projectName)
-                .ecsClusterName(projectName + "-cluster")
                 .vpc(vpcSupplier)
                 .build();
 

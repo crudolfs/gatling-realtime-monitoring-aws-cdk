@@ -35,9 +35,11 @@ public class GatlingEcsStack extends Stack {
 
         IVpc vpc = builder.vpcSupplier.get();
 
+        String ecsClusterName = builder.namespace + "-cluster";
+
         // ECS Cluster setup
         Cluster ecsCluster = Cluster.Builder.create(this, "GatlingCluster")
-                .clusterName(builder.ecsClusterName)
+                .clusterName(ecsClusterName)
                 .defaultCloudMapNamespace(CloudMapNamespaceOptions.builder()
                         .name(builder.namespace)
                         .type(NamespaceType.DNS_PRIVATE)
@@ -63,7 +65,7 @@ public class GatlingEcsStack extends Stack {
                                 "docker plugin install rexray/ebs REXRAY_PREEMPT=true EBS_REGION=%s --grant-all-permissions\n" +
                                 "stop ecs\n" +
                                 "start ecs"
-                        , builder.ecsClusterName, availabilityZone)))
+                        , ecsClusterName, availabilityZone)))
                 // use t3a.medium
                 .instanceType(InstanceType.of(InstanceClass.BURSTABLE3_AMD, InstanceSize.MEDIUM))
                 .machineImage(EcsOptimizedImage.amazonLinux2())
@@ -130,16 +132,10 @@ public class GatlingEcsStack extends Stack {
 
     public static final class Builder extends StackBuilder<Builder> {
         private Supplier<IVpc> vpcSupplier;
-        private String ecsClusterName;
         private String namespace;
 
         public Builder vpc(Supplier<IVpc> vpc) {
             this.vpcSupplier = vpc;
-            return this;
-        }
-
-        public Builder ecsClusterName(String ecsClusterName) {
-            this.ecsClusterName = ecsClusterName;
             return this;
         }
 
