@@ -43,6 +43,7 @@ The services can be started and stopped with the AWS CLI as follows:
 
 Start:
 ```
+aws ecs update-service --cluster gatling-cluster --service influxdb --desired-count 1
 aws ecs update-service --cluster gatling-cluster --service dashboard --desired-count 1
 aws ecs update-service --cluster gatling-cluster --service gatling-runner --desired-count 1
 ```
@@ -50,11 +51,12 @@ aws ecs update-service --cluster gatling-cluster --service gatling-runner --desi
 Stop:
 ```
 aws ecs update-service --cluster gatling-cluster --service gatling-runner --desired-count 0`
+aws ecs update-service --cluster gatling-cluster --service influxdb --desired-count 0`
 aws ecs update-service --cluster gatling-cluster --service dashboard --desired-count 0`
 ```
 
-When both services are up and running, you can see the realtime performance test results in the Grafana dashboard.
+When all services are up and running, you can see the realtime performance test results in the Grafana dashboard.
 The Grafana dashboard is accessible in a browser at http://<public-ip>:3000 (default login: admin/admin).
 The public IP address of Grafana can be found in the AWS Console by opening the Network section of the running 
 ECS Task within the dashboard ECS Service. Of course, using a load balancer with a proper DNS would have been more 
-appropriate, but is not currently part of the infra....  
+appropriate, but is currently not yet part of the infrastructure....  

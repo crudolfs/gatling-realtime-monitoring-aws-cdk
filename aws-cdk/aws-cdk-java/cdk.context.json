@@ -1,0 +1,98 @@
+{
+  "availability-zones:account=056319353359:region=eu-west-1": [
+    "eu-west-1a",
+    "eu-west-1b",
+    "eu-west-1c"
+  ],
+  "vpc-provider:account=056319353359:filter.tag:Name=gatling-vpc:region=eu-west-1:returnAsymmetricSubnets=true": {
+    "vpcId": "vpc-0c676049c0962d7dc",
+    "vpcCidrBlock": "10.12.0.0/16",
+    "availabilityZones": [],
+    "subnetGroups": [
+      {
+        "name": "gatling-private-subnet",
+        "type": "Private",
+        "subnets": [
+          {
+            "subnetId": "subnet-0311daef9ab77963e",
+            "cidr": "10.12.0.0/19",
+            "availabilityZone": "eu-west-1a",
+            "routeTableId": "rtb-00ee2115160a36487"
+          },
+          {
+            "subnetId": "subnet-05506b823978370d5",
+            "cidr": "10.12.32.0/19",
+            "availabilityZone": "eu-west-1b",
+            "routeTableId": "rtb-065015321765c4ac2"
+          }
+        ]
+      },
+      {
+        "name": "gatling-public-subnet",
+        "type": "Public",
+        "subnets": [
+          {
+            "subnetId": "subnet-0cb8efe939bb5c129",
+            "cidr": "10.12.64.0/20",
+            "availabilityZone": "eu-west-1a",
+            "routeTableId": "rtb-087cc5953431f5e5a"
+          },
+          {
+            "subnetId": "subnet-02d4467f7dcdfced6",
+            "cidr": "10.12.80.0/20",
+            "availabilityZone": "eu-west-1b",
+            "routeTableId": "rtb-084a293443d40a15c"
+          }
+        ]
+      }
+    ]
+  },
+  "vpc-provider:account=056319353359:filter.tag:Name=gatling4-vpc:region=eu-west-1:returnAsymmetricSubnets=true": {
+    "vpcId": "vpc-0e3a24d30388feae7",
+    "vpcCidrBlock": "10.12.0.0/16",
+    "availabilityZones": [],
+    "subnetGroups": [
+      {
+        "name": "gatling-private-subnet",
+        "type": "Private",
+        "subnets": [
+          {
+            "subnetId": "subnet-0a1845e064678c0e1",
+            "cidr": "10.12.0.0/19",
+            "availabilityZone": "eu-west-1a",
+            "routeTableId": "rtb-0fa1033d22940455b"
+          },
+          {
+            "subnetId": "subnet-0b23b0eb00270c764",
+            "cidr": "10.12.32.0/19",
+            "availabilityZone": "eu-west-1b",
+            "routeTableId": "rtb-02c4582a0a1c89ad3"
+          }
+        ]
+      },
+      {
+        "name": "gatling-public-subnet",
+        "type": "Public",
+        "subnets": [
+          {
+            "subnetId": "subnet-045fe38c0608b5ccf",
+            "cidr": "10.12.64.0/20",
+            "availabilityZone": "eu-west-1a",
+            "routeTableId": "rtb-08899e11ef1314dd9"
+          },
+          {
+            "subnetId": "subnet-068cb5bab32b2a46e",
+            "cidr": "10.12.80.0/20",
+            "availabilityZone": "eu-west-1b",
+            "routeTableId": "rtb-0099aabfb42a3c0ce"
+          }
+        ]
+      }
+    ]
+  },
+  "availability-zones:account=088939293112:region=eu-west-1": [
+    "eu-west-1a",
+    "eu-west-1b",
+    "eu-west-1c"
+  ]
+}

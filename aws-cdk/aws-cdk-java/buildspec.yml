@@ -1,0 +1,35 @@
+version: 0.2
+
+phases:
+  install:
+    runtime-versions:
+      java: openjdk11
+
+    commands:
+      - echo "install step"
+
+  pre_build:
+    commands:
+      - echo "pre_build step"
+      - cd aws-cdk/aws-cdk-java
+      - npm install -g aws-cdk
+      - cdk --version
+      - mvn -v
+      - mvn clean install
+
+  build:
+    commands:
+      - echo "build started on `date`"
+      - cdk synth gatlingVpcStack --o dist
+      - cdk synth gatlingEcsStack --o dist
+
+  post_build:
+    commands:
+      - echo "post_build step"
+
+artifacts:
+  files:
+    - 'gatlingVpcStack.template.json'
+    - 'gatlingEcsStack.template.json'
+  base-directory: aws-cdk/aws-cdk-java/dist
+
