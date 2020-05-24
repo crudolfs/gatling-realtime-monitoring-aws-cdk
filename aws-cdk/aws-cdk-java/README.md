@@ -6,7 +6,7 @@ consists of the following 2 stacks:
 
 ## AWS CDK installation
 The AWS CDK command line tool (cdk) and the AWS Construct Library are developed in TypeScript and run on Node.js.
-Therefore you must have Node.js version >= 10.3.0 installed. Then install the AWS CDK by running the following command:
+Therefore you must have Node.js version >= 10.3.0 installed. Installing the AWS CDK is easy:
 
 `npm install -g aws-cdk`
 
@@ -26,8 +26,10 @@ and in general:
 - [Specify AWS credentials and region](https://docs.aws.amazon.com/cdk/latest/guide/getting_started.html#getting_started_credentials)
 
 The configuration of AWS credentials and region are very important, it's key to make the infrastructure deployment work correctly.
+Make sure that when using the --profile option you specify the credentials in the ~/.aws/config file instead of the ~/.aws/credentials file 
+which is normally the case when using profiles with the AWS CLI.  
 
-**Note**: the aws-mfa tool may help when MFA is enforced on your AWS account: https://github.com/broamski/aws-mfa
+**Note**: The aws-mfa tool may be helpful when MFA is enforced on your AWS account: https://github.com/broamski/aws-mfa
 
 ## Useful commands
  * `mvn package` compile and run tests
