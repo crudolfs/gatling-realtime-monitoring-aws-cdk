@@ -37,7 +37,7 @@ public class GatlingRunnerFargateService extends Construct {
         String logGroupName = String.format("/ecs/%s/%s", builder.serviceProps.getClusterNamespace(), builder.serviceProps.getServiceName());
 
         DockerImageAsset gatlingRunnerAsset = DockerImageAsset.Builder.create(this, "gatlingRunnerAsset")
-                .directory("../gatling-monitoring/gatling-runner")
+                .directory("../../gatling-monitoring/gatling-runner")
                 .build();
 
         ContainerDefinitionOptions containerDefinitionOptions = ContainerDefinitionOptions.builder()
