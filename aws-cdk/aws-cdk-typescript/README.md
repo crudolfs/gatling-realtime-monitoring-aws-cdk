@@ -48,4 +48,6 @@ which is normally the case when using profiles with the AWS CLI.
 cdk deploy GatlingVpcStack --profile <profile-name>
 cdk deploy GatlingEcsStack --profile <profile-name>
 ```
- 
+
+## Run services on AWS
+The AWS ECS section of [gatling-monitoring](../../gatling-monitoring/README.md) explains how to run this solution on AWS.
