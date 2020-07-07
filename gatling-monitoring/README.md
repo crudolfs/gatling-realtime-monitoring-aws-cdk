@@ -32,7 +32,7 @@ A Gatling test run can be started as follows:
 The --network parameter is required to communicate with InfluxDB which is started via [docker-compose](./docker-compose.yml).
 The -gh and -gp options indicate the GATLING_GRAPHITE_HOST and GATLING_GRAPHITE_PORT respectively which is needed to communicate with InfluxDB.
 
-## AWS ECS Fargate build and deployment
+## AWS ECS (hybrid: EC2/Fargate) build and deployment
 The AWS infrastructure that is needed to run the Gatling solution in the AWS cloud is available in code in the [aws-cdk](../aws-cdk) folder.
 Deploying the gatling AWS CDK app results in creating all AWS infrastructure resources required for this solution. By using the asset 
 feature of the AWS CDK this app even builds the local Docker images for the gatling-runner, grafana and influxdb services and pushes these 
@@ -44,7 +44,7 @@ The services can be started and stopped with the AWS CLI as follows:
 Start:
 ```
 aws ecs update-service --cluster gatling-cluster --service influxdb --desired-count 1
-aws ecs update-service --cluster gatling-cluster --service dashboard --desired-count 1
+aws ecs update-service --cluster gatling-cluster --service grafana --desired-count 1
 aws ecs update-service --cluster gatling-cluster --service gatling-runner --desired-count 1
 ```
 
@@ -52,7 +52,7 @@ Stop:
 ```
 aws ecs update-service --cluster gatling-cluster --service gatling-runner --desired-count 0`
 aws ecs update-service --cluster gatling-cluster --service influxdb --desired-count 0`
-aws ecs update-service --cluster gatling-cluster --service dashboard --desired-count 0`
+aws ecs update-service --cluster gatling-cluster --service grafana --desired-count 0`
 ```
 
 When all services are up and running, you can see the realtime performance test results in the Grafana dashboard.

@@ -60,3 +60,6 @@ The deployment of these stacks is automated in a CodePipeline stack
 The CodePipeline itself is also written in infrastructure code and can be deployed with the following command:
 
 `cdk deploy GatlingPipelineStack --profile <profile-name>`.
+
+## Run services on AWS
+The AWS ECS section of [gatling-monitoring](../../gatling-monitoring/README.md) explains how to run this solution on AWS.
