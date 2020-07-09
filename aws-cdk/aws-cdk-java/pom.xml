@@ -17,7 +17,7 @@
         <maven-shade-plugin.version>3.2.2</maven-shade-plugin.version>
 
         <!-- Dependency versions -->
-        <aws-cdk.version>1.38.0</aws-cdk.version>
+        <aws-cdk.version>1.50.0</aws-cdk.version>
         <junit.jupiter.version>5.5.0</junit.jupiter.version>
     </properties>
 
